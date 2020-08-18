@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #coding: utf-8
 '''
-Base file of GradeMan
+Base file of GradeMan2
 '''
 
 import os
@@ -70,6 +70,9 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                 out = json.dumps(t)
             else:
                 out = 'ERROR 404: Not found'
+            self.send_response(200)
+            self.send_header('Content-type', 'application/json; charset=utf-8')
+            self.end_headers()
             self.wfile.write(bytes(out, 'utf8'))
             return
         elif self.path.startswith('/getStudentImg/'):

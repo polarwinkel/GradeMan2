@@ -115,19 +115,21 @@ function renderAttendances(aa) {
     out += '<div style="float:left; width:2rem; font-weight:bold;">M</div>\n';
     out += '<div style="float:left; font-weight:bold;">Bemerkung</div><br /></div><hr style="clear:both;"/>\n';
     for (var i=0; i<aa.length; i++) {
+        console.log(aa[i]);
         out += '<div class="img" id="'+aa[i].sid+'" style="float:left;"></div>\n<div class="student">\n';
         out += '<input type="hidden" id="lid" name="lid" class="formdata" value="'+aa[i].lid+'" />';
         out += '<input type="hidden" id="sid" name="sid" class="formdata" value="'+aa[i].sid+'" />';
-        out += '<div style="float:left; width:12rem; max-width:100%%;">'+'Schüler-ID [TODO: Name]: '+aa[i].sid+'</div>\n';
-        if (aa[i].attendant == false) 
+        out += '<div style="float:left; width:12rem; max-width:100%%;">'+'<a href="../student/'+aa[i].sid+'">\
+                '+aa[i].givenname+' '+aa[i].familyname+'</a></div>\n';
+        if (aa[i].attendant == 'False') 
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" id="attendant" class="formdata" value="True" /></div>\n';
         else
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" id="attendant" class="formdata" value="True" checked /></div>\n';
-        if (aa[i].excused == true)
+        if (aa[i].excused == 'True')
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="excused" id="excused" class="formdata" value="True" checked /></div>\n';
         else
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="excused" id="excused" class="formdata" value="True" /></div>\n';
-        if (aa[i].homework == false)
+        if (aa[i].homework == 'False')
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" id="homework" class="formdata" value="True" /></div>\n';
         else
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" id="homework" class="formdata" value="True" checked /></div>\n';

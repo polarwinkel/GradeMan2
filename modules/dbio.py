@@ -330,7 +330,10 @@ class GmDb:
     def getLessonAttendances(self, lid):
         ''' get attendances for a lesso '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM attendances WHERE lid=?'''
+        sqlTemplate = '''
+                SELECT * FROM (SELECT * FROM attendances WHERE lid=?) 
+                LEFT JOIN (SELECT id AS sid, givenname, familyname FROM students) 
+                USING(sid) ORDER BY familyname'''
         cursor.execute(sqlTemplate, (lid, ))
         attendances = cursor.fetchall()
         if attendances is None:
@@ -346,6 +349,8 @@ class GmDb:
                         'performance'  : att[5],
                         'participation': att[6],
                         'memo'         : att[7],
+                        'givenname'    : att[8],
+                        'familyname'   : att[9],
                     }
             result.append(a)
         return result

@@ -92,6 +92,7 @@ function showLessons() {
     });
 }
 function showStudents() {
+    console.log(1);
     var url = '../json/classStudents/'+c.cid;
     fetch(url).then(function(response) {
         if (response.ok) {
@@ -104,7 +105,7 @@ function showStudents() {
         out = '<h2>Alle Schüler</h2>\n<ul>';
         for (i=0; i<sjson.length; i++) {
             out += '\
-                <li><a href="{{ relroot }}student/'+sjson[i].sid+'">\
+                <li><a href="../student/'+sjson[i].sid+'">\
                 '+sjson[i].givenname+' '+sjson[i].familyname+'</a><br />\
                 <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" /></li>';
         }

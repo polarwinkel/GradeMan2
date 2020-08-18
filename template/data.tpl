@@ -29,7 +29,7 @@ showClasses();
 
 // students:
 function showStudents() {
-    var url = '../json/students';
+    var url = 'json/students';
     fetch(url).then(function(response) {
         if (response.ok) 
             return response.json();
@@ -40,7 +40,7 @@ function showStudents() {
         out = '<h2>Alle Schüler</h2>\n<ul>';
         for (i=0; i<sjson.length; i++) {
             out += '\
-                <li><a href="{{ relroot }}student/'+sjson[i].sid+'">\
+                <li><a href="student/'+sjson[i].sid+'">\
                 '+sjson[i].givenname+' '+sjson[i].familyname+'</a></li>';
         }
         content.innerHTML = out+'</ul>';
