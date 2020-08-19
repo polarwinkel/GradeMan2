@@ -4,7 +4,7 @@
 <div id="content">
 </div>
 <script src="../static/getFormJson.js"></script>
-<script src="{{ relroot }}static/polalert.js"></script>
+<script src="../static/polalert.js"></script>
 <script>
 var l = {{ ljson }};
 var c = {{ cjson }};

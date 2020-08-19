@@ -111,7 +111,7 @@ class GmDb:
     def getStudents(self):
         ''' get all students '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT id, givenname, familyname, gender FROM students'''
+        sqlTemplate = '''SELECT id, givenname, familyname, gender FROM students ORDER BY familyname, givenname'''
         cursor.execute(sqlTemplate)
         tlist = cursor.fetchall()
         result = []

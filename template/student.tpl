@@ -31,6 +31,8 @@
         </ul>
     </p>
 </div>
+<script src="../static/getFormJson.js"></script>
+<script src="../static/polalert.js"></script>
 <script>
 var s = {{ sjson }};
 
@@ -49,7 +51,7 @@ function edit() {
         <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
         <p style="clear:both;">\
         {% for c in classes %}\
-            <label for="cid{{ c["cid"] }}">{{ c["name"] }}</label>\
+            <label for="cid{{ c["cid"] }}">{{ c["name"] }} {{ c["subject"] }}</label>\
             {% if c in sclasses %}\
                 <input type="checkbox" id="cid{{ c["cid"] }}" name="cids" class="formdata" value="{{ c["cid"] }}" checked /><br />\n\
             {% else %}\
@@ -70,40 +72,10 @@ function edit() {
         document.getElementById(s['gender']).selected = true;
     }
 }
-function getFormJson() {
-    var out = {};
-    var form = document.getElementsByClassName('formdata');
-    for (var i=0, item; item = form[i]; i++) {
-        if (out.hasOwnProperty(item.name)) { // key exists
-            if (!Array.isArray(out[item.name])) { // convert to array
-                out[item.name] = [out[item.name]]
-            }
-            if (item.type != 'checkbox'){
-                out[item.name].push(item.value);
-            } else {
-                if (item.checked) {
-                    out[item.name].push(item.value)
-                } else {
-                    out[item.name].push('False')
-                }
-            }
-        } else {
-            if (item.type != 'checkbox'){
-                out[item.name] = item.value;
-            } else {
-                if (item.checked) {
-                    out[item.name] = item.value;
-                } else {
-                    out[item.name] = 'False';
-                }
-            }
-        }
-    }
-    return out;
-}
 function send() {
     var xhr = new XMLHttpRequest();
     var formJson = getFormJson();
+    console.log(formJson);
     if (formJson.sid=='') {
         xhr.open('POST', '../newDbEntry', false);
     } else {
@@ -123,9 +95,83 @@ function send() {
         document.getElementById('content').innerHTML = xhr.responseText;
     }
 }
+function strToStudent(str, strDelimiter ){
+    var strDelimiter = (strDelimiter || ',');
+    var s = {'what': 'student', 'givenname': '', 'familyname': '', 'gender': 'None', 'memo': ''};
+    var i=0;
+    while ((str[i] != strDelimiter) && (str.length > i)) {
+        s.familyname += str[i];
+        i++;
+    }
+    i++;
+    while ((str[i] == ' ') && (str.length > i)) i++;
+    while ((str[i] != strDelimiter) && (str.length > i)) {
+        s.givenname += str[i];
+        i++;
+    }
+    i++;
+    while ((str[i] == ' ') && (str.length > i)) i++;
+    if (str[i] == 'm') s.gender = 'male';
+    else if (str[i] == 'w') s.gender = 'female';
+    else if (str[i] == 'o') s.gender = 'other';
+    return s;
+}
+function csvImport() {
+    var formJson = getFormJson();
+    var cids = formJson.cids;
+    var csv = document.getElementById('csv').value;
+    var lines = csv.split('\n');
+    for (var i=0; i<lines.length; i++) {
+        s = strToStudent(lines[i]);
+        if ((s.givenname != '') && (s.familyname != '')) {
+            s.cids = cids;
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '../newDbEntry', false);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.send(JSON.stringify(s));
+            if (isNaN(xhr.responseText)) {
+                var success = false;
+                pa.error('FEHLER! Ich breche es hier ab.<br /> Fehlermeldung:<br />'+xhr.responseText);
+                break;
+            } else var success = true;
+            // TODO: Ask for every pared student if it shall be imported!
+        }
+    }
+    if (success) {
+        pa.message('Erfolgreich gespeichert!');
+    } else {
+        document.getElementById('content').innerHTML = xhr.responseText;
+    }
+}
+function showCsvImportForm() {
+    document.getElementById('title').innerHTML = 'Klassenliste importieren';
+    content = '\
+        <p>Bitte die Klassenliste im CSV-Format in das Eingabefeld kopieren.<br />\
+        Formatierungsbeispiel:<br />\
+        <code>Mustermann, Max, m</code> (Optionen für Geschlecht: <code>m</code>(ännlich), <code>w</code>(eiblich) oder <code>o</code>(other))<br />\
+        (Leerzeichen nach dem Komma werden automatisch entfernt, ein abschließendes Komma und das Geschlecht ist nicht nötig.)</p>\
+        <div style="clear:both;"><label for="memo">Klassenliste im <br />csv-Format: </label><textarea id="csv"></textarea></div>\
+        <p style="clear:both;">\
+        {% for c in classes %}\
+            <label for="cid{{ c["cid"] }}">{{ c["name"] }} {{ c["subject"] }}</label>\
+            {% if c in sclasses %}\
+                <input type="checkbox" id="cid{{ c["cid"] }}" name="cids" class="formdata" value="{{ c["cid"] }}" checked /><br />\n\
+            {% else %}\
+                <input type="checkbox" id="cid{{ c["cid"] }}" name="cids" class="formdata" value="{{ c["cid"] }}" /><br />\n\
+            {% endif %}\
+        {% endfor %}\
+        </p>\
+        <div style="clear:both; text-align:center;">\
+        </div>\
+        <input type="submit" value="Speichern" onclick="csvImport()">\
+    ';
+    document.getElementById('content').innerHTML = content;
+    
+}
 
 if (s.sid == '') {
     document.getElementById('title').innerHTML = 'Neuen Schüler hinzufügen';
+    document.getElementById('pagenav').innerHTML = '<a onclick="showCsvImportForm()">Klassenliste importieren</a>'
     edit();
 }
 </script>
