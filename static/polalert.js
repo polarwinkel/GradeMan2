@@ -18,7 +18,8 @@ class Polalert {
         this.box.style.minHeight = '200px';
         this.box.style.width = '50%';
         this.box.style.minWidth = '300px';
-        this.box.style.background = 'lightgray';
+        this.box.style.backgroundColor = 'rgba(200, 200, 200, 0.8)';
+        this.box.style.backdropFilter = 'blur(5px)';
         this.box.style.boxShadow = '10px 10px 5px rgba(0,0,0,0.5)';
         this.box.style.borderRadius = '10px';
         this.box.style.marginLeft = '25%';
@@ -31,7 +32,7 @@ class Polalert {
         this.buttonOk.parent = this.box;
         this.buttonOk.setAttribute('id', 'polalertOk');
         this.buttonOk.style.width = '200px';
-        this.buttonOk.style.background = '#0f0';
+        this.buttonOk.style.backgroundColor = 'rgba(0, 200, 0, 0.8)';
         this.buttonOk.style.border = '5px solid silver';
         this.buttonOk.style.borderRadius = '10px';
         this.buttonOk.style.fontSize = '1.6rem';
@@ -40,7 +41,7 @@ class Polalert {
         this.buttonNo.parent = this.box;
         this.buttonNo.setAttribute('id', 'polalertNo');
         this.buttonNo.style.width = '200px';
-        this.buttonNo.style.background = '#f00';
+        this.buttonNo.style.backgroundColor = 'rgba(200, 0, 0, 0.8)';
         this.buttonNo.style.border = '5px solid silver';
         this.buttonNo.style.borderRadius = '10px';
         this.buttonNo.style.fontSize = '1.6rem';
@@ -59,7 +60,8 @@ class Polalert {
         this.bgBox.style.display = 'block';
     }
     message(msg) {
-        this.box.style.background = '#5f5';
+        this.box.style.backgroundColor = 'rgba(255, 255, 255, 0.7)';
+        this.box.style.backdropFilter = 'blur(5px)';
         this.box.innerHTML = '<p>'+msg+'</p>';
         this.box.appendChild(this.buttonOk);
         document.body.appendChild(this.bgBox);
@@ -70,7 +72,8 @@ class Polalert {
         this.bgBox.style.display = 'block';
     }
     warning(warn) {
-        this.box.style.background = '#fa0';
+        this.box.style.backgroundColor = 'rgba(255, 180, 0, 0.7)';
+        this.box.style.backdropFilter = 'blur(5px)';
         this.box.innerHTML = '<p>'+warn+'</p>';
         this.box.appendChild(this.buttonOk);
         document.body.appendChild(this.bgBox);
@@ -81,7 +84,8 @@ class Polalert {
         this.bgBox.style.display = 'block';
     }
     error(err) {
-        this.box.style.background = '#f55';
+        this.box.style.backgroundColor = 'rgba(255, 50, 50, 0.7)';
+        this.box.style.backdropFilter = 'blur(5px)';
         this.box.innerHTML = '<p>'+err+'</p>';
         this.box.appendChild(this.buttonOk);
         document.body.appendChild(this.bgBox);

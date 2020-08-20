@@ -145,6 +145,7 @@ function csvImport() {
 }
 function showCsvImportForm() {
     document.getElementById('title').innerHTML = 'Klassenliste importieren';
+    document.getElementById('pagenav').innerHTML = '<a onclick="location.reload()">Abbrechen</a>'
     content = '\
         <p>Bitte die Klassenliste im CSV-Format in das Eingabefeld kopieren.<br />\
         Formatierungsbeispiel:<br />\

@@ -49,11 +49,10 @@ function edit() {
         } else {
             cid[c[i].cid] = new Option(c[i].name+' '+c[i].subject, c[i].cid, );
         }
-        console.log(i);
     }
     document.getElementById('topic').value = l.topic;
     var count = document.getElementById('count')
-    var options = ['1', '2', '3', '4', '5', '25%', '33%', '50%'];
+    var options = ['0', '1', '2', '3', '4', '5', '25%', '33%', '50%'];
     options.forEach(function(element,key) {
         if (element == l.count) {
             count[key] = new Option(element, element, true, true);
@@ -114,8 +113,25 @@ function renderAttendances(aa) {
     out += '<div style="float:left; width:2rem; font-weight:bold;">F</div>\n';
     out += '<div style="float:left; width:2rem; font-weight:bold;">M</div>\n';
     out += '<div style="float:left; font-weight:bold;">Bemerkung</div><br /></div><hr style="clear:both;"/>\n';
+    // define grade-range:
+    for (var i=0; i < c.length; i++) {
+        if (c[i].cid == l.cid) {
+            console.log(c[i]);
+            var graduate = c[i].graduate;
+            console.log(graduate);
+            break;
+        }
+    }
+    console.log(graduate);
+    if (graduate == 'on') {
+        var low = 0;
+        var high = 15;
+    }
+    else {
+        var low = 1;
+        var high = 6;
+    }
     for (var i=0; i<aa.length; i++) {
-        console.log(aa[i]);
         out += '<div class="img" id="'+aa[i].sid+'" style="float:left;"></div>\n<div class="student">\n';
         out += '<input type="hidden" id="lid" name="lid" class="formdata" value="'+aa[i].lid+'" />';
         out += '<input type="hidden" id="sid" name="sid" class="formdata" value="'+aa[i].sid+'" />';
@@ -134,9 +150,10 @@ function renderAttendances(aa) {
         else
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" id="homework" class="formdata" value="True" checked /></div>\n';
         // performance:
+        //out += '<input type="range" min="'+low+'" max="'+high+'" value="'+aa[i].performance+'" name="performance" id="performance" class="formdata">';
         out += '<select style="width:2rem;" name="performance" id="performance" class="formdata">\n';
         out += '<option value="-">-</option>';
-        for (var j=1; j<=6; j++) {
+        for (var j=low; j<=high; j++) {
             if (aa[i].performance == j)
                 out += '<option value="'+j+'" selected>'+j+'</option>';
             else
@@ -146,7 +163,7 @@ function renderAttendances(aa) {
         // participation:
         out += '<select style="width:2rem;" name="participation" id="participation" class="formdata">\n';
         out += '<option value="-">-</option>';
-        for (var j=1; j<=6; j++) {
+        for (var j=low; j<=high; j++) {
             if (aa[i].participation == j)
                 out += '<option value="'+j+'" selected>'+j+'</option>';
             else

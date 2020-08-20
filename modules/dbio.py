@@ -179,7 +179,7 @@ class GmDb:
     def getClasses(self):
         ''' get all classes '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM classes'''
+        sqlTemplate = '''SELECT * FROM classes ORDER BY name, subject'''
         cursor.execute(sqlTemplate)
         tlist = cursor.fetchall()
         result = []
@@ -230,7 +230,7 @@ class GmDb:
     def getStudentClasses(self, sid):
         ''' get a list of the classes that a student is member of '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT cid FROM studentclass WHERE sid=?'''
+        sqlTemplate = '''SELECT cid FROM studentclass WHERE sid=? ORDER BY name, subject'''
         try:
             cursor.execute(sqlTemplate, (sid, ))
         except sqlite3.OperationalError as err:
@@ -259,7 +259,7 @@ class GmDb:
         sqlTemplate = '''SELECT sid FROM studentclass WHERE cid=?'''
         cursor.execute(sqlTemplate, (cid, ))
         sids = cursor.fetchall()
-        sqlTemplate = '''SELECT * FROM students WHERE id=?'''
+        sqlTemplate = '''SELECT * FROM students WHERE id=? ORDER BY familyname, givenname'''
         result = []
         for sid in sids:
             cursor.execute(sqlTemplate, (str(sid[0]), ))
@@ -278,7 +278,7 @@ class GmDb:
     def getClassLessonsShort(self, cid):
         ''' get the lessons of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM lessons WHERE cid=?'''
+        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date'''
         cursor.execute(sqlTemplate, (cid, ))
         lessons = cursor.fetchall()
         if lessons is None:
@@ -297,7 +297,7 @@ class GmDb:
     def getClassLessons(self, cid):
         ''' get the lessons of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM lessons WHERE cid=?'''
+        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date'''
         cursor.execute(sqlTemplate, (cid, ))
         lessons = cursor.fetchall()
         if lessons is None:
@@ -491,7 +491,7 @@ class GmDb:
     def getMemos(self):
         ''' returns all memos '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM memos ORDER BY prio'''
+        sqlTemplate = '''SELECT * FROM memos ORDER BY prio, date'''
         cursor.execute(sqlTemplate)
         memos = cursor.fetchall()
         result = []
