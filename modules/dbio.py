@@ -230,7 +230,7 @@ class GmDb:
     def getStudentClasses(self, sid):
         ''' get a list of the classes that a student is member of '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT cid FROM studentclass WHERE sid=? ORDER BY name, subject'''
+        sqlTemplate = '''SELECT cid FROM studentclass WHERE sid=?'''
         try:
             cursor.execute(sqlTemplate, (sid, ))
         except sqlite3.OperationalError as err:
