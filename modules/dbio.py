@@ -256,20 +256,18 @@ class GmDb:
     def getClassStudents(self, cid):
         ''' get a list of the students that are member of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT sid FROM studentclass WHERE cid=?'''
-        cursor.execute(sqlTemplate, (cid, ))
-        sids = cursor.fetchall()
-        sqlTemplate = '''SELECT * FROM students WHERE id=? ORDER BY familyname, givenname'''
+        sqlTemplate = '''SELECT sid, givenname, familyname, gender, memo 
+                FROM students LEFT JOIN studentclass ON students.id = studentclass.sid 
+                WHERE cid=? ORDER BY familyname, givenname'''
+        students = cursor.execute(sqlTemplate, (cid, ))
         result = []
-        for sid in sids:
-            cursor.execute(sqlTemplate, (str(sid[0]), ))
-            tup = cursor.fetchall()[0]
+        for s in students:
             s = {
-                        'sid'       : tup[0],
-                        'givenname' : tup[1],
-                        'familyname': tup[2],
-                        'gender'    : tup[3],
-                        'memo'      : tup[4],
+                        'sid'       : s[0],
+                        'givenname' : s[1],
+                        'familyname': s[2],
+                        'gender'    : s[3],
+                        'memo'      : s[4],
                     }
             result.append(s)
         self._connection.commit()
