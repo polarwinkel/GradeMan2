@@ -15,6 +15,13 @@ var c = {{ cjson }};
 var lShort = {{ lShortJson }};
 var content = document.getElementById('content');
 
+function mdtex2html(mdtex) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', '../mdtex2html', false);
+    xhr.setRequestHeader('Content-Type', 'application/mdtex');
+    xhr.send(mdtex);
+    return xhr.responseText;
+}
 function edit() {
     content.innerHTML = '\
         <input type="hidden" id="what" name="what" class="formdata" value="class" />\
@@ -35,7 +42,8 @@ function show() {
         document.getElementById('title').innerHTML = 'Neue Klasse hinzufügen';
         edit();
     } else {
-        out = '<h2>Stunden:</h2>\n<ul>\n';
+        out = mdtex2html(c.memo);
+        out += '<h2>Stunden:</h2>\n<ul>\n';
         for (var i=0; i < lShort.length; i++) {
             out += '<li><a href="{{ relroot }}lesson/'+lShort[i].lid+'">'+lShort[i].date+': '+lShort[i].topic+'</a></li>\n';
         }

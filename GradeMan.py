@@ -152,7 +152,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             if lid.isnumeric():
                 l = db.getLesson(lid)
             if l == None:
-                l = {'lid':'', 'date':'', 'cid':'', 'topic':'', 'count':'', 'memo':''}
+                l = {'lid':'', 'date':'', 'cid':'', 'topic':'', 'count':'', 'memo':'', 'details':''}
             ljson = json.dumps(l)
             c = db.getClasses()
             cjson = json.dumps(c)

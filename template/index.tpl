@@ -226,7 +226,7 @@ function editTimetable() {
             newSelect.classList.add('formdata');
             newCell.appendChild(newSelect);
             var cid = t[i][keys[j]];
-            if (cid == '1') {
+            if (cid != '') {
                 var option = document.createElement('option');
                 option.value = cid;
                 option.text = cidFullName(cid);
