@@ -136,8 +136,8 @@ function learnNames() {
         out = '<h2>Namen lernen</h2>\n';
         var i = Math.floor(Math.random() * sjson.length);
         out += '\
-                <a id="name" onclick="showName(\''+sjson[i].givenname+' '+sjson[i].familyname+'\')">Namen anzeigen</a><br />\
-                <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" />';
+                <p id="name" onclick="showName(\''+sjson[i].givenname+' '+sjson[i].familyname+'\')" style="display:inline-block; width:350px; float:right;"><a>Namen anzeigen</a></p>\
+                <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" style="display:block; width:350px; height:450px; margin:auto;"/>'
         content.innerHTML = out;
     })
     .catch(function(err) {
@@ -145,7 +145,7 @@ function learnNames() {
     });
 }
 function showName(name) {
-    document.getElementById('name').innerHTML=name;
+    document.getElementById('name').innerHTML='<a>'+name+'</a>';
     document.getElementById('name').onclick=function(){learnNames()}; // TODO: don't reload all students if already loaded
 }
 function showAchievements() {
