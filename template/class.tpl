@@ -4,6 +4,7 @@
     <a onclick="edit()">Bearbeiten</a> | 
     <a onclick="showLessons()">Curriculum</a> | 
     <a onclick="showStudents()">Schüler</a> | 
+    <a onclick="learnNames()">Namen lernen</a> | 
     <a onclick="showAchievements()">Leistungen</a>
 </nav>
 <div id="content">
@@ -100,7 +101,6 @@ function showLessons() {
     });
 }
 function showStudents() {
-    console.log(1);
     var url = '../json/classStudents/'+c.cid;
     fetch(url).then(function(response) {
         if (response.ok) {
@@ -110,18 +110,43 @@ function showStudents() {
             throw new Error('ERROR: Students could not be fetched from server!');
     })
     .then(function(sjson) {
-        out = '<h2>Alle Schüler</h2>\n<ul>';
+        out = '<h2>Alle Schüler</h2>\n';
         for (i=0; i<sjson.length; i++) {
             out += '\
-                <li><a href="../student/'+sjson[i].sid+'">\
+                <div style="border: 1px solid silver; float: left; width: 350px; height:500px; margin: 1rem;"><a href="../student/'+sjson[i].sid+'">\
                 '+sjson[i].givenname+' '+sjson[i].familyname+'</a><br />\
-                <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" /></li>';
+                <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" /></div>';
         }
-        content.innerHTML = out+'</ul>';
+        content.innerHTML = out+'<div style="clear:both;"></div>';
     })
     .catch(function(err) {
         console.log(err);
     });
+}
+function learnNames() {
+    var url = '../json/classStudents/'+c.cid;
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        else 
+            throw new Error('ERROR: Students could not be fetched from server!');
+    })
+    .then(function(sjson) {
+        out = '<h2>Namen lernen</h2>\n';
+        var i = Math.floor(Math.random() * sjson.length);
+        out += '\
+                <a id="name" onclick="showName(\''+sjson[i].givenname+' '+sjson[i].familyname+'\')">Namen anzeigen</a><br />\
+                <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" />';
+        content.innerHTML = out;
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+}
+function showName(name) {
+    document.getElementById('name').innerHTML=name;
+    document.getElementById('name').onclick=function(){learnNames()}; // TODO: don't reload all students if already loaded
 }
 function showAchievements() {
     content.innerHTML = 'TODO';
