@@ -237,7 +237,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             stream = BytesIO(img)
             im = Image.open(stream)
             #im = Image.frombuffer('RGB', (350, 450), stream)
-            im.thumbnail((70, 90))
+            im.thumbnail((105, 135))
             with BytesIO() as output:
                 im.save(output, format='jpeg')
                 img = output.getvalue()

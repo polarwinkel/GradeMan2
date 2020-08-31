@@ -1,7 +1,9 @@
 <h1 id="title"></h1>
 <nav id="pagenav">
+    <p>Navigation wird geladen...</p>
 </nav>
 <div id="content">
+    <p>Seiteninhalt wird geladen...</p>
 </div>
 <script src="../static/getFormJson.js"></script>
 <script src="../static/polalert.js"></script>
@@ -102,6 +104,35 @@ function showAttendances() {
         console.log(err);
     });
 }
+function renderRange(what, nr, val, graduate) {
+    var text = document.getElementById(what+'Text'+nr);
+    var range = document.getElementById(what+'Range'+nr);
+    if (graduate) {
+        if (val >= 0 && val <= 15) {
+            range.value = val;
+            text.value = val;
+            var r = (15-val)*17;
+            var g = val*17;
+            text.style.backgroundColor = 'rgb('+r+', '+g+', 0)';
+        } else {
+            range.value = -1;
+            text.value = '-';
+            text.style.backgroundColor = '#888';
+        }
+    } else {
+        if (val >= 1 && val <= 6) {
+            range.value = val;
+            text.value = val;
+            var r = (val-1)*51;
+            var g = 255-(val-1)*51;
+            text.style.backgroundColor = 'rgb('+r+', '+g+', 0)';
+        } else {
+            range.value = 0;
+            text.value = '-';
+            text.style.backgroundColor = '#888';
+        }
+    }
+}
 function renderAttendances(aa) {
     out = '<h2>Teilnahmen</h2>\n';
     out = '<p id="showImages"><a onclick="showImages()">Bilder einblenden</a></p>\n';
@@ -110,47 +141,54 @@ function renderAttendances(aa) {
     out += '<div style="float:left; width:1.5rem; font-weight:bold;">A</div>\n';
     out += '<div style="float:left; width:1.5rem; font-weight:bold;">E</div>\n';
     out += '<div style="float:left; width:1.5rem; font-weight:bold;">H</div>\n';
-    out += '<div style="float:left; width:2rem; font-weight:bold;">F</div>\n';
-    out += '<div style="float:left; width:2rem; font-weight:bold;">M</div>\n';
+    out += '<div style="float:left;">\n';
+    out += '<div style="float:left; width:11.5rem; font-weight:bold;">Fachlich</div>\n';
+    out += '<div style="float:left; width:11.5rem; font-weight:bold;">Mitarbeit</div>\n';
+    out += '</div>\n';
     out += '<div style="float:left; font-weight:bold;">Bemerkung</div><br /></div><hr style="clear:both;"/>\n';
     // define grade-range:
     for (var i=0; i < c.length; i++) {
         if (c[i].cid == l.cid) {
-            console.log(c[i]);
-            var graduate = c[i].graduate;
-            console.log(graduate);
+            if (c[i].graduate == 'False') var graduate = false;
+            else var graduate = true;
             break;
         }
     }
-    console.log(graduate);
-    if (graduate == 'on') {
+    if (graduate) {
         var low = 0;
         var high = 15;
-    }
-    else {
+    } else {
         var low = 1;
         var high = 6;
     }
     for (var i=0; i<aa.length; i++) {
         out += '<div class="img" id="'+aa[i].sid+'" style="float:left;"></div>\n<div class="student">\n';
-        out += '<input type="hidden" id="lid" name="lid" class="formdata" value="'+aa[i].lid+'" />';
-        out += '<input type="hidden" id="sid" name="sid" class="formdata" value="'+aa[i].sid+'" />';
+        out += '<input type="hidden" name="lid" class="formdata" value="'+aa[i].lid+'" />';
+        out += '<input type="hidden" name="sid" class="formdata" value="'+aa[i].sid+'" />';
         out += '<div style="float:left; width:12rem; max-width:100%%;">'+'<a href="../student/'+aa[i].sid+'">\
                 '+aa[i].givenname+' '+aa[i].familyname+'</a></div>\n';
         if (aa[i].attendant == 'False') 
-            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" id="attendant" class="formdata" value="True" /></div>\n';
+            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" class="formdata" value="True" /></div>\n';
         else
-            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" id="attendant" class="formdata" value="True" checked /></div>\n';
+            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" class="formdata" value="True" checked /></div>\n';
         if (aa[i].excused == 'True')
-            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="excused" id="excused" class="formdata" value="True" checked /></div>\n';
+            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="excused" class="formdata" value="True" checked /></div>\n';
         else
-            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="excused" id="excused" class="formdata" value="True" /></div>\n';
+            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="excused" class="formdata" value="True" /></div>\n';
         if (aa[i].homework == 'False')
-            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" id="homework" class="formdata" value="True" /></div>\n';
+            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" class="formdata" value="True" /></div>\n';
         else
-            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" id="homework" class="formdata" value="True" checked /></div>\n';
+            out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="homework" class="formdata" value="True" checked /></div>\n';
         // performance:
-        //out += '<input type="range" min="'+low+'" max="'+high+'" value="'+aa[i].performance+'" name="performance" id="performance" class="formdata">';
+        out += '<div style="float:left;">\n';
+        out += '<div style="float:left;">\n\
+                <input type="text" name="performance" id="performanceText'+aa[i].sid+'" class="formdata" \
+                oninput="renderRange(\'performance\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+                style="width:2rem;">\n';
+        out += '<input type="range" id="performanceRange'+aa[i].sid+'" min="'+(low-1)+'" max="'+high+'" \
+                oninput="renderRange(\'performance\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+                style="width:9rem;">\n</div>\n';
+        /*
         out += '<select style="width:2rem;" name="performance" id="performance" class="formdata">\n';
         out += '<option value="-">-</option>';
         for (var j=low; j<=high; j++) {
@@ -160,8 +198,18 @@ function renderAttendances(aa) {
                 out += '<option value="'+j+'">'+j+'</option>';
         }
         out += '</select>\n'
+        */
         // participation:
-        out += '<select style="width:2rem;" name="participation" id="participation" class="formdata">\n';
+        out += '<div style="float:left;">\n\
+                <input type="text" name="participation" id="participationText'+aa[i].sid+'" class="formdata" \
+                oninput="renderRange(\'participation\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+                style="width:2rem;">\n';
+        out += '<input type="range" id="participationRange'+aa[i].sid+'" min="'+(low-1)+'" max="'+high+'" \
+                oninput="renderRange(\'participation\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+                style="width:9rem;">\n</div>\n';
+        out += '</div>';
+        /*
+        out += '<select style="width:2rem;" name="participation" class="formdata">\n';
         out += '<option value="-">-</option>';
         for (var j=low; j<=high; j++) {
             if (aa[i].participation == j)
@@ -170,13 +218,17 @@ function renderAttendances(aa) {
                 out += '<option value="'+j+'">'+j+'</option>';
         }
         out += '</select>\n'
-        out += '<input type="text" name="memo" id="memo" class="formdata" value="'+aa[i].memo+'" style="width:30rem; max-width:100%%;"/><br />\n';
+        */
+        out += '<input type="text" name="memo" class="formdata" value="'+aa[i].memo+'" style="width:100%; max-width:100%;"/><br />\n';
         out += '</div>\n<hr style="clear:both;" />\n';
     }
-    out += '<div>TODO: Notenrange entsprechend Kursoption (Oberstufe!)</div>\n';
     out += '<button onclick="saveAttendances()" style="clear:both;">Speichern</button><br />\n';
     out += '<p>Legende: A=Anwesend, E=Entschuldigt, H=Hausaufgabe, F=Fachliche Leistung, M=Mitarbeit</p>\n';
     content.innerHTML = out;
+    for (var i=0; i<aa.length; i++) {
+        renderRange('performance', aa[i].sid, aa[i].performance, graduate);
+        renderRange('participation', aa[i].sid, aa[i].participation, graduate);
+    }
 }
 function saveAttendances() {
     var xhr = new XMLHttpRequest();
@@ -200,7 +252,7 @@ function showImages() {
     document.getElementById('showImages').innerHTML = '';
     students = document.getElementsByClassName('student');
     for (var i=0, item; item = students[i]; i++) {
-        item.style.marginLeft = '75px';
+        item.style.marginLeft = '110px';
     }
     memos = document.getElementsByName('memo');
     for (var i=0, item; item = memos[i]; i++) {
