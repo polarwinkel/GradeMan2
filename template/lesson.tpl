@@ -104,11 +104,11 @@ function showAttendances() {
         console.log(err);
     });
 }
-function renderRange(what, nr, val, graduate) {
+function renderRange(what, nr, graduate, val='-') {
     var text = document.getElementById(what+'Text'+nr);
     var range = document.getElementById(what+'Range'+nr);
     if (graduate) {
-        if (val >= 0 && val <= 15) {
+        if (val && !isNaN(val) && Number(val) >= 0 && Number(val) <= 15) {
             range.value = val;
             text.value = val;
             var r = (15-val)*17;
@@ -120,14 +120,16 @@ function renderRange(what, nr, val, graduate) {
             text.style.backgroundColor = '#888';
         }
     } else {
-        if (val >= 1 && val <= 6) {
+        range.style.direction = 'rtl';
+        console.log(val);
+        if (val && !isNaN(val) && Number(val) >= 1 && Number(val) <= 6) {
             range.value = val;
             text.value = val;
             var r = (val-1)*51;
             var g = 255-(val-1)*51;
             text.style.backgroundColor = 'rgb('+r+', '+g+', 0)';
         } else {
-            range.value = 0;
+            range.value = 7;
             text.value = '-';
             text.style.backgroundColor = '#888';
         }
@@ -155,11 +157,11 @@ function renderAttendances(aa) {
         }
     }
     if (graduate) {
-        var low = 0;
+        var low = -1;
         var high = 15;
     } else {
         var low = 1;
-        var high = 6;
+        var high = 7;
     }
     for (var i=0; i<aa.length; i++) {
         out += '<div class="img" id="'+aa[i].sid+'" style="float:left;"></div>\n<div class="student">\n';
@@ -183,42 +185,20 @@ function renderAttendances(aa) {
         out += '<div style="float:left;">\n';
         out += '<div style="float:left;">\n\
                 <input type="text" name="performance" id="performanceText'+aa[i].sid+'" class="formdata" \
-                oninput="renderRange(\'performance\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+                oninput="renderRange(\'performance\', \''+aa[i].sid+'\', '+graduate+', this.value)" \
                 style="width:2rem;">\n';
-        out += '<input type="range" id="performanceRange'+aa[i].sid+'" min="'+(low-1)+'" max="'+high+'" \
-                oninput="renderRange(\'performance\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+        out += '<input type="range" id="performanceRange'+aa[i].sid+'" min="'+(low)+'" max="'+high+'" \
+                oninput="renderRange(\'performance\', \''+aa[i].sid+'\', '+graduate+', this.value)" \
                 style="width:9rem;">\n</div>\n';
-        /*
-        out += '<select style="width:2rem;" name="performance" id="performance" class="formdata">\n';
-        out += '<option value="-">-</option>';
-        for (var j=low; j<=high; j++) {
-            if (aa[i].performance == j)
-                out += '<option value="'+j+'" selected>'+j+'</option>';
-            else
-                out += '<option value="'+j+'">'+j+'</option>';
-        }
-        out += '</select>\n'
-        */
         // participation:
         out += '<div style="float:left;">\n\
                 <input type="text" name="participation" id="participationText'+aa[i].sid+'" class="formdata" \
-                oninput="renderRange(\'participation\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+                oninput="renderRange(\'participation\', \''+aa[i].sid+'\', '+graduate+', this.value)" \
                 style="width:2rem;">\n';
-        out += '<input type="range" id="participationRange'+aa[i].sid+'" min="'+(low-1)+'" max="'+high+'" \
-                oninput="renderRange(\'participation\', \''+aa[i].sid+'\', this.value, '+graduate+')" \
+        out += '<input type="range" id="participationRange'+aa[i].sid+'" min="'+(low)+'" max="'+high+'" \
+                oninput="renderRange(\'participation\', \''+aa[i].sid+'\', '+graduate+', this.value)" \
                 style="width:9rem;">\n</div>\n';
         out += '</div>';
-        /*
-        out += '<select style="width:2rem;" name="participation" class="formdata">\n';
-        out += '<option value="-">-</option>';
-        for (var j=low; j<=high; j++) {
-            if (aa[i].participation == j)
-                out += '<option value="'+j+'" selected>'+j+'</option>';
-            else
-                out += '<option value="'+j+'">'+j+'</option>';
-        }
-        out += '</select>\n'
-        */
         out += '<input type="text" name="memo" class="formdata" value="'+aa[i].memo+'" style="width:100%; max-width:100%;"/><br />\n';
         out += '</div>\n<hr style="clear:both;" />\n';
     }
@@ -226,8 +206,8 @@ function renderAttendances(aa) {
     out += '<p>Legende: A=Anwesend, E=Entschuldigt, H=Hausaufgabe, F=Fachliche Leistung, M=Mitarbeit</p>\n';
     content.innerHTML = out;
     for (var i=0; i<aa.length; i++) {
-        renderRange('performance', aa[i].sid, aa[i].performance, graduate);
-        renderRange('participation', aa[i].sid, aa[i].participation, graduate);
+        renderRange('performance', aa[i].sid, graduate, aa[i].performance);
+        renderRange('participation', aa[i].sid, graduate, aa[i].participation);
     }
 }
 function saveAttendances() {
