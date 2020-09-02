@@ -196,6 +196,9 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             elif self.path.endswith('.css'):
                 mimetype='text/css'
                 sendReply = True
+            elif self.path.endswith('.svg'):
+                mimetype='image/svg+xml'
+                sendReply = True
             elif self.path.endswith('.woff2'):
                 mimetype = 'application/font-woff2'
                 sendReply = True
