@@ -113,9 +113,9 @@ function showStudents() {
         out = '<h2>Alle Schüler</h2>\n';
         for (i=0; i<sjson.length; i++) {
             out += '\
-                <div style="border: 1px solid silver; float: left; width: 350px; height:500px; margin: 1rem;"><a href="../student/'+sjson[i].sid+'">\
-                '+sjson[i].givenname+' '+sjson[i].familyname+'</a><br />\
-                <img src="../getStudentImg/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" /></div>';
+                <div style="border: 1px solid rgba(127,127,127,0.2); float: left; text-align:center; width: 135px; height:225px; margin: 0.3rem;"><a href="../student/'+sjson[i].sid+'">\
+                '+sjson[i].givenname+'<br />'+sjson[i].familyname+'</a><br />\
+                <img src="../getStudentImg/small/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" /></div>';
         }
         content.innerHTML = out+'<div style="clear:both;"></div>';
     })
