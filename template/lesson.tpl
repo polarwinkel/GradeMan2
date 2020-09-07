@@ -45,12 +45,12 @@ function edit() {
     document.getElementById('lid').value = l.lid;
     document.getElementById('date').value = l.date;
     var cid = document.getElementById('cid');
-    for (var i=0; i < c.length; i++) {
-        if (c[i].cid == l.cid) {
-            cid[c[i].cid] = new Option(c[i].name+' '+c[i].subject, c[i].cid, true, true);
-        } else {
-            cid[c[i].cid] = new Option(c[i].name+' '+c[i].subject, c[i].cid, );
+    if (l.lid == '') {
+        for (var i=0; i < c.length; i++) {
+            cid[c[i].cid] = new Option(c[i].name+' '+c[i].subject, c[i].cid);
         }
+    } else {
+        cid[0] = new Option(cl.name+' '+cl.subject, l.cid, true, true);
     }
     document.getElementById('topic').value = l.topic;
     var count = document.getElementById('count')
@@ -242,11 +242,13 @@ function showImages() {
 // start-stuff:
 if (l.lid == '') {
     title.innerHTML = 'Neue Stunde hinzufügen';
+    pagenav.innerHTML = '';
     edit();
 } else {
     for (var i = 0; i < c.length; i++) {
         if (c[i].cid == l.cid) {
             var cl = c[i];
+            break;
         }
     }
     title.innerHTML = 'Stunde von: '+cl.name+' '+cl.subject;
