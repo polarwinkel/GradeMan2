@@ -312,6 +312,43 @@ class GmDb:
             result.append(l)
         return result
     
+    def getClassAttendances(self, cid):
+        ''' get all addendances of a class '''
+        cursor = self._connection.cursor()
+        sqlTemplate = '''SELECT id AS sid, givenname, familyname FROM students
+                LEFT JOIN studentclass ON students.id=studentclass.sid WHERE cid=?
+                ORDER BY familyname, givenname'''
+        cursor.execute(sqlTemplate, (cid, ))
+        stus = cursor.fetchall()
+        if stus is None:
+            return None
+        students = []
+        for stu in stus:
+            s = {
+                        'sid'       : stu[0],
+                        'givenname' : stu[1],
+                        'familyname': stu[2],
+                    }
+            students.append(s)
+        lShort = self.getClassLessonsShort(cid)
+        attendances = []
+        for l in lShort:
+            att = {'lid': l['lid'], }
+            la = self.getLessonAttendances(l['lid']);
+            for s in students:
+                aFound = False
+                sid = s['sid']
+                for a in la:
+                    if str(a['sid']) == str(sid):
+                        att[str(sid)] = a
+                        aFound = True
+                        break
+                if not aFound:
+                    att[sid] = {}
+            attendances.append(att)
+        result = {'students':students, 'attendances':attendances}
+        return result
+    
     def newAttendances(self, lid):
         ''' inserts new attendances for a lesson '''
         cursor = self._connection.cursor()
@@ -326,7 +363,7 @@ class GmDb:
         return 0
     
     def getLessonAttendances(self, lid):
-        ''' get attendances for a lesso '''
+        ''' get attendances for a lesson '''
         cursor = self._connection.cursor()
         sqlTemplate = '''
                 SELECT * FROM (SELECT * FROM attendances WHERE lid=?) 

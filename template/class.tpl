@@ -10,6 +10,23 @@
 <div id="content">
     {{ memo }}
 </div>
+<style>
+    table#achievements {
+        border:1px solid #888;
+        width:100%;
+        border-collapse: collapse;
+    }
+    table#achievements tr { border: none; }
+    table#achievements th {
+        border-right:1px solid #888; 
+        border-left:1px solid #888;
+        line-height: 90%;
+    }
+    table#achievements td {
+        border-right:1px solid #888; 
+        border-left:1px solid #888;
+    }
+</style>
 <script src="../static/getFormJson.js"></script>
 <script>
 var c = {{ cjson }};
@@ -149,6 +166,50 @@ function showName(name) {
     document.getElementById('name').onclick=function(){learnNames()}; // TODO: don't reload all students if already loaded
 }
 function showAchievements() {
-    content.innerHTML = 'TODO';
+    var url = '../json/classAttendances/'+c.cid;
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        else 
+            throw new Error('ERROR: Attendances could not be fetched from server!');
+    })
+    .then(function(ajson) {
+        content.innerHTML = 'Die Leistungsübersicht wird geladen...';
+        out = '<h2>Leistungsübersicht</h2>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        for (var i=0; i<ajson.students.length; i++) {
+            out += '<th><a href="../student/'+ajson.students[i].sid+'">';
+            for (var j=0; j<ajson.students[i].givenname.length; j++) {
+                out += ajson.students[i].givenname.charAt(j)+'<br />';
+            }
+            out += '</a></th>';
+        }
+        out += '</tr>';
+        for (var i=0; i<ajson.attendances.length; i++) {
+            if (ajson.attendances[i].lid == lShort[i].lid) { 
+                out += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
+                out += '<td>'+lShort[i].count+'</td>\n';
+                for (var j=0; j<ajson.students.length; j++) {
+                    var sid = ajson.students[j].sid;
+                    if (ajson.attendances[i][sid] != {}) {
+                        out += '<td>'+ajson.attendances[i][sid].performance+'<br />';
+                        out += ajson.attendances[i][sid].participation+'</td>';
+                    } else {
+                        out += '<td>&varnothing;</td>';
+                    }
+                }
+            } else {
+                out += '<tr><td>FEHLER: Inkonsistente Daten!</td>';
+            }
+            out += '</tr>\n';
+        }
+        out += '</tr></table>\n';
+        out += '<p>TODO: Anwesenheiten, Berechnungen</p>';
+        content.innerHTML = out;
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
 }
 </script>

@@ -65,6 +65,11 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                 if lid.isnumeric():
                     aa = db.getLessonAttendances(lid)
                     out = json.dumps(aa)
+            elif what.startswith('classAttendances/'):
+                cid = what[17:]
+                if cid.isnumeric():
+                    aa = db.getClassAttendances(cid)
+                    out = json.dumps(aa)
             elif what=='timetable':
                 t = db.getTimetable()
                 out = json.dumps(t)
