@@ -27,7 +27,7 @@ function show() {
     var out = '<h2>'+l.topic+'</h2>';
     out += '<p class="date">'+l.date+'</p>\n';
     out += '<p>Notizen:</p>\n<div class="border">'+mdtex2html(l.memo)+'</div>\n';
-    out += '<p>Details:</p>\n<div class="border">'+mdtex2html(l.details)+'</div>\n';
+    out += '<p>Details/Skript:</p>\n<div class="border">'+mdtex2html(l.details)+'</div>\n';
     content.innerHTML = out;
 }
 function edit() {
@@ -39,7 +39,7 @@ function edit() {
         <div style="clear:both;"><label for="topic">Thema: </label><input type="text" name="topic" id="topic" class="formdata" /></div>\
         <div style="clear:both;"><label for="count">Faktor: </label><select name="count" id="count" class="formdata smallSelect"></select></div>\
         <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
-        <div style="clear:both;"><label for="details">Details: </label><textarea name="details" id="details" class="formdata"></textarea></div>\
+        <div style="clear:both;"><label for="details">Details/Skript: </label><textarea name="details" id="details" class="formdata"></textarea></div>\
         <div style="clear:both;"><input type="submit" value="Speichern" onclick="send()"></div>\
     '
     document.getElementById('lid').value = l.lid;
