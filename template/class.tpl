@@ -176,36 +176,92 @@ function showAchievements() {
     })
     .then(function(ajson) {
         content.innerHTML = 'Die Leistungsübersicht wird geladen...';
-        out = '<h2>Leistungsübersicht</h2>\n';
-        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        
+        head = '';
         for (var i=0; i<ajson.students.length; i++) {
-            out += '<th><a href="../student/'+ajson.students[i].sid+'">';
+            head += '<th><a href="../student/'+ajson.students[i].sid+'">';
             for (var j=0; j<ajson.students[i].givenname.length; j++) {
-                out += ajson.students[i].givenname.charAt(j)+'<br />';
+                head += ajson.students[i].givenname.charAt(j)+'<br />';
             }
-            out += '</a></th>';
+            head += '</a></th>';
         }
-        out += '</tr>';
+        head += '</tr>';
+        
+        special = '';
+        normal = '';
+        checks = '';
         for (var i=0; i<ajson.attendances.length; i++) {
-            if (ajson.attendances[i].lid == lShort[i].lid) { 
-                out += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
-                out += '<td>'+lShort[i].count+'</td>\n';
-                for (var j=0; j<ajson.students.length; j++) {
-                    var sid = ajson.students[j].sid;
-                    if (ajson.attendances[i][sid] != {}) {
-                        out += '<td>'+ajson.attendances[i][sid].performance+'<br />';
-                        out += ajson.attendances[i][sid].participation+'</td>';
-                    } else {
-                        out += '<td>&varnothing;</td>';
+            if (ajson.attendances[i].lid == lShort[i].lid) {
+                count = lShort[i].count;
+                if (!isNaN(parseFloat(count)) && isFinite(count) && (parseFloat(count)>0)) {
+                    normal += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
+                    normal += '<td>'+lShort[i].count+'</td>\n';
+                    checks += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
+                    checks += '<td>'+lShort[i].count+'</td>\n';
+                    for (var j=0; j<ajson.students.length; j++) {
+                        var sid = ajson.students[j].sid;
+                        if (ajson.attendances[i][sid] != {} && ajson.attendances[i][sid].performance != null) {
+                            normal += '<td>'+ajson.attendances[i][sid].performance+'<br />';
+                            normal += ajson.attendances[i][sid].participation+'</td>';
+                        } else {
+                            normal += '<td>&varnothing;</td>';
+                        }
+                        checks += '<td>';
+                        if (ajson.attendances[i][sid].attendant=='False') {
+                            if (ajson.attendances[i][sid].excused=='False') {
+                                checks += '<span style="color:red;">&#9744;</span><br />';
+                            } else {
+                                checks += '<span style="color:green;">&#9744;</span><br />';
+                            }
+                        } else {
+                            checks += '&#9745;<br />';
+                        }
+                        if (ajson.attendances[i][sid].homework=='False') {
+                            checks += '<span style="color:red;">&#9744;</span>';
+                        } else {
+                            checks += '&#9745;';
+                        }
+                        checks += '</ td>';
                     }
+                    normal += '</tr>\n';
+                    checks += '</tr>\n';
+                }
+                else {
+                    special += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
+                    special += '<td>'+lShort[i].count+'</td>\n';
+                    for (var j=0; j<ajson.students.length; j++) {
+                        var sid = ajson.students[j].sid;
+                        if (ajson.attendances[i][sid] != {}) {
+                            special += '<td>'+ajson.attendances[i][sid].performance+'<br />';
+                            special += ajson.attendances[i][sid].participation+'</td>';
+                        } else {
+                            special += '<td>&varnothing;</td>';
+                        }
+                    }
+                    special += '</tr>\n';
                 }
             } else {
-                out += '<tr><td>FEHLER: Inkonsistente Daten!</td>';
+                console.log('ERROR: Inkonsistent Data!');
             }
-            out += '</tr>\n';
         }
+        
+        out = '<h2>Leistungsübersicht</h2>\n';
+        out += '<h3>Sonderstunden</h3>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        out += head;
+        out += special;
         out += '</tr></table>\n';
-        out += '<p>TODO: Anwesenheiten, Berechnungen</p>';
+        out += '<h3>Stunden</h3>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        out += head;
+        out += normal;
+        out += '</tr></table>\n';
+        out += '<h3>Anwesenheiten</h3>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        out += head;
+        out += checks;
+        out += '</tr></table>\n';
+        out += '<p>TODO: Berechnungen</p>';
         content.innerHTML = out;
     })
     .catch(function(err) {
