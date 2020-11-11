@@ -16,7 +16,7 @@
         width:100%;
         border-collapse: collapse;
     }
-    table#achievements tr { border: none; }
+    table#achievements tr { border: 1px dashed #888; }
     table#achievements th {
         border-right:1px solid #888; 
         border-left:1px solid #888;
@@ -190,26 +190,46 @@ function showAchievements() {
         special = '';
         normal = '';
         checks = '';
+        sMissedLessons = new Array(ajson.students.length).fill(0);
+        sUnexcused = new Array(ajson.students.length).fill(0);
+        sNoHomework = new Array(ajson.students.length).fill(0);
+        sPerformance = new Array(ajson.students.length).fill(0);
+        sPerformanceN = new Array(ajson.students.length).fill(0);
+        sParticipation = new Array(ajson.students.length).fill(0);
+        sParticipationN = new Array(ajson.students.length).fill(0);
         for (var i=0; i<ajson.attendances.length; i++) {
             if (ajson.attendances[i].lid == lShort[i].lid) {
                 count = lShort[i].count;
                 if (!isNaN(parseFloat(count)) && isFinite(count) && (parseFloat(count)>0)) {
+                    // normal lesson
                     normal += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
                     normal += '<td>'+lShort[i].count+'</td>\n';
                     checks += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
                     checks += '<td>'+lShort[i].count+'</td>\n';
                     for (var j=0; j<ajson.students.length; j++) {
                         var sid = ajson.students[j].sid;
+                        // create rows for performance:
                         if (ajson.attendances[i][sid] != {} && ajson.attendances[i][sid].performance != null) {
                             normal += '<td>'+ajson.attendances[i][sid].performance+'<br />';
+                            if (!isNaN(parseFloat(ajson.attendances[i][sid].performance))) {
+                                sPerformance[j] = sPerformance[j] + (parseFloat(ajson.attendances[i][sid].performance)*parseFloat(count));
+                                sPerformanceN[j] = sPerformanceN[j] + parseFloat(count);
+                            }
                             normal += ajson.attendances[i][sid].participation+'</td>';
+                            if (!isNaN(parseFloat(ajson.attendances[i][sid].participation))) {
+                                sParticipation[j] = sParticipation[j] + (parseFloat(ajson.attendances[i][sid].participation)*parseFloat(count));
+                                sParticipationN[j] = sParticipationN[j] + parseFloat(count);
+                            }
                         } else {
                             normal += '<td>&varnothing;</td>';
                         }
+                        // create rows for checkes values (i.e. attendances):
                         checks += '<td>';
                         if (ajson.attendances[i][sid].attendant=='False') {
+                            sMissedLessons[j] += parseFloat(count);
                             if (ajson.attendances[i][sid].excused=='False') {
                                 checks += '<span style="color:red;">&#9744;</span><br />';
+                                sUnexcused[j] += parseFloat(count);
                             } else {
                                 checks += '<span style="color:green;">&#9744;</span><br />';
                             }
@@ -218,6 +238,7 @@ function showAchievements() {
                         }
                         if (ajson.attendances[i][sid].homework=='False') {
                             checks += '<span style="color:red;">&#9744;</span>';
+                            sNoHomework[j] = sNoHomework[j] + 1;
                         } else {
                             checks += '&#9745;';
                         }
@@ -227,6 +248,7 @@ function showAchievements() {
                     checks += '</tr>\n';
                 }
                 else {
+                    // special lesson, like a test or a count of 0
                     special += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
                     special += '<td>'+lShort[i].count+'</td>\n';
                     for (var j=0; j<ajson.students.length; j++) {
@@ -246,22 +268,74 @@ function showAchievements() {
         }
         
         out = '<h2>Leistungsübersicht</h2>\n';
+        // total:
+        out += '<h3>Gesamt</h3>\n';
+        out += '<table id="achievements"><tr><th></th><th>F</th>\n';
+        out += head;
+        out += '<tr><td>Fehlstunden</td><td></td>\n';
+        for (var j=0; j<ajson.students.length; j++) {
+            out += '<td>';
+            out += (sMissedLessons[j]);
+            out += '</td>\n';
+        }
+        out += '</tr>\n';
+        out += '<tr><td>Unentschuldigt</td><td></td>\n';
+        for (var j=0; j<ajson.students.length; j++) {
+            out += '<td>';
+            out += (sUnexcused[j]);
+            out += '</td>\n';
+        }
+        out += '</tr>\n';
+        out += '<tr><td>keine Hausaufgaben</td><td></td>\n';
+        for (var j=0; j<ajson.students.length; j++) {
+            out += '<td>';
+            out += (sNoHomework[j]);
+            out += '</td>\n';
+        }
+        out += '</tr>\n';
+        out += '<tr><td>Fachlich</td><td></td>\n';
+        console.log(sPerformanceN);
+        for (var j=0; j<ajson.students.length; j++) {
+            out += '<td>';
+            if (sPerformanceN[j] > 0) {
+                out += (sPerformance[j]/sPerformanceN[j]).toFixed(1);
+            } else {
+                out += '-';
+            }
+            out += '</td>\n';
+        }
+        out += '</tr>\n';
+        out += '<tr><td>Mitarbeit</td><td></td>\n';
+        for (var j=0; j<ajson.students.length; j++) {
+            out += '<td>';
+            if (sParticipationN[j] > 0) {
+                out += (sParticipation[j]/sParticipationN[j]).toFixed(1);
+            } else {
+                out += '-';
+            }
+            out += '</td>\n';
+        }
+        out += '</tr></table>\n';
+        out += '<p><i><b>Hinweis:</b> Es werden für die Gesamtberechnung nur reguläre Stunden berücksichtigt.</i></p>';
+        // special lessons:
         out += '<h3>Sonderstunden</h3>\n';
         out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
         out += head;
         out += special;
         out += '</tr></table>\n';
-        out += '<h3>Stunden</h3>\n';
+        // normal lessons:
+        out += '<h3>reguläre Stunden</h3>\n';
         out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
         out += head;
         out += normal;
         out += '</tr></table>\n';
-        out += '<h3>Anwesenheiten</h3>\n';
+        // checkmarks:
+        out += '<h3>Anwesenheiten / keine Hausaufgaben</h3>\n';
         out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
         out += head;
         out += checks;
         out += '</tr></table>\n';
-        out += '<p>TODO: Berechnungen</p>';
+        out += '<p><i><b>Legende: </b>Erster Kasten: Anwesenheit, <span style="color:green;">&#9744;</span>/<span style="color:red;">&#9744;</span> heißt entschuldigt/unentschuldigt; zweiter Kasten: Hausaufgaben</i></p>';
         content.innerHTML = out;
     })
     .catch(function(err) {
