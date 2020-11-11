@@ -269,32 +269,31 @@ function showAchievements() {
         
         out = '<h2>Leistungsübersicht</h2>\n';
         // total:
-        out += '<h3>Gesamt</h3>\n';
-        out += '<table id="achievements"><tr><th></th><th>F</th>\n';
+        out += '<h3>Gesamtberechnung</h3>\n';
+        out += '<table id="achievements"><tr><th></th>\n';
         out += head;
-        out += '<tr><td>Fehlstunden</td><td></td>\n';
+        out += '<tr><td>Fehlstunden</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             out += '<td>';
             out += (sMissedLessons[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Unentschuldigt</td><td></td>\n';
+        out += '<tr><td>Unentschuldigt</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             out += '<td>';
             out += (sUnexcused[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>keine Hausaufgaben</td><td></td>\n';
+        out += '<tr><td>keine Hausaufgaben</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             out += '<td>';
             out += (sNoHomework[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Fachlich</td><td></td>\n';
-        console.log(sPerformanceN);
+        out += '<tr><td>Fachlich</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             out += '<td>';
             if (sPerformanceN[j] > 0) {
@@ -305,7 +304,7 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Mitarbeit</td><td></td>\n';
+        out += '<tr><td>Mitarbeit</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             out += '<td>';
             if (sParticipationN[j] > 0) {
@@ -316,26 +315,26 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr></table>\n';
-        out += '<p><i><b>Hinweis:</b> Es werden für die Gesamtberechnung nur reguläre Stunden berücksichtigt.</i></p>';
         // special lessons:
         out += '<h3>Sonderstunden</h3>\n';
-        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>&#128477;</th>\n';
         out += head;
         out += special;
         out += '</tr></table>\n';
         // normal lessons:
         out += '<h3>reguläre Stunden</h3>\n';
-        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>&#128477;</th>\n';
         out += head;
         out += normal;
         out += '</tr></table>\n';
         // checkmarks:
         out += '<h3>Anwesenheiten / keine Hausaufgaben</h3>\n';
-        out += '<table id="achievements"><tr><th>Datum</th><th>F</th>\n';
+        out += '<table id="achievements"><tr><th>Datum</th><th>&#128477;</th>\n';
         out += head;
         out += checks;
         out += '</tr></table>\n';
         out += '<p><i><b>Legende: </b>Erster Kasten: Anwesenheit, <span style="color:green;">&#9744;</span>/<span style="color:red;">&#9744;</span> heißt entschuldigt/unentschuldigt; zweiter Kasten: Hausaufgaben</i></p>';
+        out += '<p><b>Hinweis zur Gesamtberechnung:</b> Es werden nur reguläre Stunden, keine Sonderstunden berücksichtigt.<br />(Eine Gesamtnote ist eine pädagogische, keine algorithmische Entscheidung!)</p>';
         content.innerHTML = out;
     })
     .catch(function(err) {
