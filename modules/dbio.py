@@ -308,6 +308,7 @@ class GmDb:
                         'topic'     : les[3],
                         'count'     : les[4],
                         'memo'      : les[5],
+                        'details'   : les[6],
                     }
             result.append(l)
         return result

@@ -59,6 +59,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                     ll = db.getClassLessons(cid)
                     for l in ll:
                         l['memo'] = mdTeX2html.convert(l['memo'])
+                        l['details'] = mdTeX2html.convert(l['details'])
                     out = json.dumps(ll)
             elif what.startswith('lessonAttendances/'):
                 lid = what[18:]

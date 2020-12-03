@@ -3,6 +3,7 @@
     <a onclick="show()">Anzeigen</a> | 
     <a onclick="edit()">Bearbeiten</a> | 
     <a onclick="showLessons()">Curriculum</a> | 
+    <a onclick="showDetails()">Skript</a> | 
     <a onclick="showStudents()">Schüler</a> | 
     <a onclick="learnNames()">Namen lernen</a> | 
     <a onclick="showAchievements()">Leistungen</a>
@@ -62,7 +63,7 @@ function show() {
     } else {
         out = mdtex2html(c.memo);
         out += '<h2>Stunden:</h2>\n<ul>\n';
-        for (var i=0; i < lShort.length; i++) {
+        for (var i=lShort.length-1; i >=0 ; i--) {
             out += '<li><a href="{{ relroot }}lesson/'+lShort[i].lid+'">'+lShort[i].date+': '+lShort[i].topic+'</a></li>\n';
         }
         out += '</ul>';
@@ -105,11 +106,31 @@ function showLessons() {
     })
     .then(function(ljson) {
         out = '<h2>Stunden des Kurses</h2>\n<ul>';
-        for (i=0; i<ljson.length; i++) {
+        for (i=ljson.length-1; i>=0; i--) {
             out += '\
                 <li><a href="{{ relroot }}lesson/'+ljson[i].lid+'">\
                 '+ljson[i].date+': '+ljson[i].topic+'</a><br />\
                 '+ljson[i].memo+'</li>\n';
+        }
+        content.innerHTML = out+'</ul>';
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+}
+function showDetails() {
+    var url = '../json/classLessons/'+c.cid;
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        else 
+            throw new Error('ERROR: Students could not be fetched from server!');
+    })
+    .then(function(ljson) {
+        out = '<h2>Skript</h2>\n<ul>';
+        for (i=0; i<ljson.length; i++) {
+            out += ljson[i].details;
         }
         content.innerHTML = out+'</ul>';
     })
