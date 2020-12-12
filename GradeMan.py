@@ -86,15 +86,15 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             return
         
         self._set_headers()
-        with open('template/base.tpl') as f:
+        with open('templates/base.tpl') as f:
             basetemplate = Template(f.read())
-        with open('template/nav.tpl') as f:
+        with open('templates/nav.tpl') as f:
             nav = Template(f.read())
         relroot = './'
         
         # switch for the path:
         if self.path == '/':
-            with open('template/index.tpl') as f:
+            with open('templates/index.tpl') as f:
                 tmpl = Template(f.read())
             m = db.getMemos()
             mjson = json.dumps(m)
@@ -130,7 +130,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             sjson = json.dumps(s)
             classes = db.getClasses()
             sclasses = db.getStudentClasses(sid)
-            with open('template/student.tpl') as f:
+            with open('templates/student.tpl') as f:
                 tmpl = Template(f.read())
             content = tmpl.render(s=s, memo=memo, img=img, sjson=sjson, classes=classes, sclasses=sclasses)
         elif self.path.startswith('/class/'):
@@ -147,7 +147,7 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
                 lShortJson = []
             memo = mdTeX2html.convert(c['memo'])
             cjson = json.dumps(c)
-            with open('template/class.tpl') as f:
+            with open('templates/class.tpl') as f:
                 tmpl = Template(f.read())
             content = tmpl.render(relroot=relroot, c=c, memo=memo, cjson=cjson, lShortJson=lShortJson)
         elif self.path.startswith('/lesson/'):
@@ -162,24 +162,24 @@ class HTTPServer_RequestHandler(BaseHTTPRequestHandler):
             ljson = json.dumps(l)
             c = db.getClasses()
             cjson = json.dumps(c)
-            with open('template/lesson.tpl') as f:
+            with open('templates/lesson.tpl') as f:
                 tmpl = Template(f.read())
             content = tmpl.render(relroot=relroot, ljson=ljson, cjson=cjson)
         elif self.path == '/data':
             c = db.getClasses()
             cjson = json.dumps(c)
-            with open('template/data.tpl') as f:
+            with open('templates/data.tpl') as f:
                 tmpl = Template(f.read())
             content = tmpl.render(relroot=relroot, cjson=cjson)
         elif self.path == '/mdTeXCheatsheet':
-            with open('template/mdTeXCheatsheet.tpl') as f:
+            with open('templates/mdTeXCheatsheet.tpl') as f:
                 tmpl = Template(f.read())
             content = tmpl.render()
         elif (self.path.startswith('/setStudentImg/')
                 and self.path.strip('/setStudentImg/').isnumeric()):
             relroot = '../'
             sid = self.path.strip('/setStudentImg/')
-            with open('template/setStudentImg.tpl') as f:
+            with open('templates/setStudentImg.tpl') as f:
                 tmpl = Template(f.read())
             content = tmpl.render(sid=sid)
         else:
