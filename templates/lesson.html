@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1 id="title"></h1>
 <nav id="pagenav">
     <p>Navigation wird geladen...</p>
@@ -8,8 +11,8 @@
 <script src="../static/getFormJson.js"></script>
 <script src="../static/polalert.js"></script>
 <script>
-var l = {{ ljson }};
-var c = {{ cjson }};
+var l = {{ ljson|tojson }};
+var c = {{ cjson|tojson }};
 
 title = document.getElementById('title');
 pagenav = document.getElementById('pagenav');
@@ -261,3 +264,4 @@ if (l.lid == '') {
 }    
 
 </script>
+{% endblock %}

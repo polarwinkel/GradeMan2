@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1 id="title" onclick="location.reload()">Datenverwaltung</h1>
 <nav id="pagenav">
     <a href="{{ relroot}}class/">Neue Klasse</a> | 
@@ -10,7 +13,7 @@
 <div id="content">
 </div>
 <script>
-var c = {{ cjson }};
+var c = {{ cjson|tojson }};
 var content = document.getElementById('content');
 
 // default: classes:
@@ -78,3 +81,4 @@ function del() {
 }    
 
 </script>
+{% endblock %}

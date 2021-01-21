@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1 id="title" onclick="location.reload()">{{ s['givenname'] }} {{ s['familyname'] }}</h1>
 <nav id="pagenav">
     <a onclick="edit()">Bearbeiten</a>
@@ -34,7 +37,7 @@
 <script src="../static/getFormJson.js"></script>
 <script src="../static/polalert.js"></script>
 <script>
-var s = {{ sjson }};
+var s = {{ sjson|tojson }};
 
 function edit() {
     content = '\
@@ -176,3 +179,4 @@ if (s.sid == '') {
     edit();
 }
 </script>
+{% endblock %}

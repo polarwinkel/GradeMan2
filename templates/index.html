@@ -1,4 +1,6 @@
-<style>
+{% extends 'base.html' %}
+
+{% block style %}
     div#halfRight Button {
         margin-top: 10px;
     }
@@ -44,8 +46,9 @@
             grid-row: 1/2;
         }
     }
-</style>
+{% endblock %}
 
+{% block content %}
 <h1 id="title" onclick="location.reload()">GradeMan Startseite</h1>
 <nav id="pagenav">
 </nav>
@@ -60,12 +63,13 @@
         <div id="timetable"><p>Stundenplan wird geladen...</p></div>
     </div>
 </div>
+
 <script src="{{ relroot }}static/getFormJson.js"></script>
 <script src="{{ relroot }}static/polalert.js"></script>
 <script>
-var m = {{ mjson }};
-var t = {{ tjson }};
-var c = {{ cjson }};
+var m = {{ mjson|tojson }};
+var t = {{ tjson|tojson }};
+var c = {{ cjson|tojson }};
 
 function mdtex2html(mdtex) {
     var xhr = new XMLHttpRequest();
@@ -299,3 +303,4 @@ showMemos();
 showTimetable();
 
 </script>
+{% endblock %}

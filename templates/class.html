@@ -1,3 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
 <h1 id="title" onclick="location.reload()">{{ c['name'] }} {{ c['subject'] }}</h1>
 <nav id="pagenav">
     <a onclick="show()">Anzeigen</a> | 
@@ -30,8 +33,8 @@
 </style>
 <script src="../static/getFormJson.js"></script>
 <script>
-var c = {{ cjson }};
-var lShort = {{ lShortJson }};
+var c = {{ c|tojson }};
+var lShort = {{ lShortJson|tojson }};
 var content = document.getElementById('content');
 
 function mdtex2html(mdtex) {
@@ -363,3 +366,5 @@ function showAchievements() {
     });
 }
 </script>
+
+{% endblock %}
