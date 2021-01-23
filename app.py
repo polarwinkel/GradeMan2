@@ -151,7 +151,6 @@ def sendSmallStudentImg(sid):
 @app.route('/mdtex2html', methods=['POST'])
 def post_mdtex2html():
     postvars = request.data
-    print(postvars)
     try:
         return mdTeX2html.convert(postvars.decode("utf-8"))
     except Exception as e:
@@ -208,7 +207,6 @@ def setStudentImg(sid):
 # TODO: check if RESTful:
 def newDbEntry():
     db = dbio.GmDb(dbfile)
-    print(request.get_json())
     if request.json['what'] == 'student':
         result = db.newStudent(request.json)
     elif request.json['what'] == 'class':
