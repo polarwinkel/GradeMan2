@@ -17,7 +17,7 @@ from modules import dbio, mdTeX2html
 
 # global settings:
 
-app = Flask(__name__, static_url_path='/static/')
+app = Flask(__name__)
 
 dbfile = "grademan.sqlite3"
 webServerPort = 8085
