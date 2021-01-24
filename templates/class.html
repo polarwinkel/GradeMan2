@@ -255,7 +255,7 @@ function showAchievements() {
                                 sParticipationN[j] = sParticipationN[j] + parseFloat(count);
                             }
                         } else {
-                            normal += '&varnothing;</td>';
+                            normal += '&empty;</td>';
                         }
                         // create rows for checkes values (i.e. attendances):
                         if (j % 5 == 0) {
@@ -308,7 +308,7 @@ function showAchievements() {
                                 special += '-<br />';
                             }
                         } else {
-                            special += '&varnothing;</td>';
+                            special += '&empty;</td>';
                         }
                     }
                     special += '</tr>\n';
@@ -325,7 +325,7 @@ function showAchievements() {
         out += head;
         out += '</tr>\n'
         out += '<tr><td colspan="'+(ajson.students.length+2)+'"><h3>Gesamtberechnung</h3></td></tr>\n';
-        out += '<tr><td>Fehlstunden</td><td></td>\n';
+        out += '<tr><td>Fehlstunden</td><td>&Sigma;</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
@@ -336,7 +336,7 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Unentschuldigt</td><td></td>\n';
+        out += '<tr><td>Unentschuldigt</td><td>&Sigma;</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
@@ -347,7 +347,7 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>keine Hausaufgaben</td><td></td>\n';
+        out += '<tr><td>keine Hausaufgaben</td><td>&Sigma;</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
@@ -358,7 +358,7 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Fachlich</td><td></td>\n';
+        out += '<tr><td>Fachlich</td><td>&empty;</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
@@ -373,7 +373,7 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Mitarbeit</td><td></td>\n';
+        out += '<tr><td>Mitarbeit</td><td>&empty;</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
