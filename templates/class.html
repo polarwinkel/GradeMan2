@@ -297,8 +297,16 @@ function showAchievements() {
                             special += '<td>';
                         }
                         if (ajson.attendances[i][sid] != {}) {
-                            special += ajson.attendances[i][sid].performance+'<br />';
-                            special += ajson.attendances[i][sid].participation+'</td>';
+                            if (typeof ajson.attendances[i][sid].performance == typeof 0){
+                                special += ajson.attendances[i][sid].performance+'<br />';
+                            } else{
+                                special += '-<br />';
+                            }
+                            if (typeof ajson.attendances[i][sid].participation == typeof 0){
+                                special += ajson.attendances[i][sid].participation+'</td>';
+                            } else{
+                                special += '-<br />';
+                            }
                         } else {
                             special += '&varnothing;</td>';
                         }
