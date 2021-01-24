@@ -33,9 +33,6 @@ def index():
     m = db.getMemos()
     t = db.getTimetable()
     c = db.getClasses()
-    content = '<h1>!!! EXPERIMENTAL !!!</h1>'
-    content += '<p>The Flask wsgi-interface is just for testing and development.</p>'
-    content += '<p>TODO: remove Flask interface or migrate some day</p>'
     return render_template('index.html', relroot='./', mjson=m, tjson=t, cjson=c)
 
 @app.route('/static/<path:path>', methods=['GET'])
