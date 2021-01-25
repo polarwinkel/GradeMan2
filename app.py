@@ -20,7 +20,7 @@ from modules import dbio, mdTeX2html
 app = Flask(__name__)
 
 dbfile = "grademan.sqlite3"
-webServerPort = 8085
+#webServerPort = 8085
 host='0.0.0.0'
 debug = True
 
