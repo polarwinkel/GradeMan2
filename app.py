@@ -212,7 +212,7 @@ def newDbEntry():
         result = db.newLesson(request.json)
     elif request.json['what'] == 'memo':
         result = db.newMemo(request.json)
-    return result
+    return str(result)
 
 @app.route('/updateDbEntry', methods=['POST'])
 @app.route('/updateDbEntry', methods=['PUT'])
