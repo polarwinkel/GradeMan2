@@ -132,7 +132,8 @@ class GmDb:
                 attendant, excused, homework, performance, participation, attendances.memo 
                 FROM attendances LEFT JOIN lessons 
                 ON attendances.lid=lessons.id 
-                WHERE sid=?'''
+                WHERE sid=?
+                ORDER BY date DESC'''
         cursor.execute(sqlTemplate, (sid, ))
         atts = cursor.fetchall()
         if atts is None:
@@ -306,7 +307,7 @@ class GmDb:
     def getClassLessonsShort(self, cid):
         ''' get the lessons of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date'''
+        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date DESC'''
         cursor.execute(sqlTemplate, (cid, ))
         lessons = cursor.fetchall()
         if lessons is None:
@@ -325,7 +326,7 @@ class GmDb:
     def getClassLessons(self, cid):
         ''' get the lessons of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date'''
+        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date DESC'''
         cursor.execute(sqlTemplate, (cid, ))
         lessons = cursor.fetchall()
         if lessons is None:

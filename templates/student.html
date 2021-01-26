@@ -29,12 +29,32 @@
     <p>
         Klassen:<ul>
         {% for c in sclasses %}
-            <li><a href="../class/{{ c['cid'] }}">{{ c['name'] }} {{ c['subject'] }}</a> <a onclick="showAttendances({{ c['cid'] }})">Teilnahmen anzeigen</a></li>
+            <li>
+                <a href="../class/{{ c['cid'] }}">{{ c['name'] }} {{ c['subject'] }}</a><br />
+                <a onclick="showAttendances({{ c['cid'] }})">Teilnahmen anzeigen</a>
+            </li>
         {% endfor %}
         </ul>
     </p>
     <div id="attendances"></div>
 </div>
+<style>
+    table#achievements {
+        border:1px solid #888;
+        width:100%;
+        border-collapse: collapse;
+    }
+    table#achievements tr { border: 1px dashed #888; }
+    table#achievements th {
+        border-right:1px solid #888; 
+        border-left:1px solid #888;
+        line-height: 90%;
+    }
+    table#achievements td {
+        border-right:1px solid #888; 
+        border-left:1px solid #888;
+    }
+</style>
 <script src="../static/getFormJson.js"></script>
 <script src="../static/polalert.js"></script>
 <script>
@@ -184,36 +204,81 @@ function showAttendances(cid) {
             throw new Error('ERROR: Students could not be fetched from server!');
     })
     .then(function(ajson) {
-        out += '<table>';
-        out += '<tr><th>Datum</th><th>&#128477;</th><th>A</th><th>HA</th><th>F</th><th>M</th><th>Bemerkungen</th></tr>';
+        normal = '';
+        special = '';
         for (i=0; i<ajson.length; i++) {
             if (ajson[i].cid == cid) {
-                out += '<tr>';
-                out += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].date+'</a></td>';
-                out += '<td>'+ajson[i].count+'</td>';
-                if (ajson[i].attendant=='True') {
-                    out += '<td><span style="color:green;">&#9745;</span></td>';
-                } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='True')) {
-                    out += '<td><span style="color:red;">&#9744;</span></td>';
-                } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='False')) {
-                    out += '<td><span style="color:red;">&#9744;</span></td>';
-                } else {
-                    out += '<td>&\empty;</td>';
-                    console.log(ajson[i].attendant + ajson[i].excused);
+                if (!isNaN(parseFloat(ajson[i].count)) && isFinite(ajson[i].count) && (parseFloat(ajson[i].count)>0)) {
+                    // normal lesson
+                    normal += '<tr>';
+                    normal += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].date+'</a></td>';
+                    normal += '<td>'+ajson[i].count+'</td>';
+                    if (ajson[i].attendant=='True' || ajson[i].attendant==null) {
+                        normal += '<td><span style="color:green;">&#9745;</span></td>';
+                    } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='True')) {
+                        normal += '<td><span style="color:green;">&#9744;</span></td>';
+                    } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='False')) {
+                        normal += '<td><span style="color:red;">&#9744;</span></td>';
+                    } else {
+                        normal += '<td>-</td>';
+                        console.log(ajson[i].attendant + ajson[i].excused);
+                    }
+                    if (ajson[i].homework=='True' || ajson[i].homework==null) {
+                        normal += '<td><span style="color:green;">&#9745;</span></td>';
+                    } else if (ajson[i].homework=='False') {
+                        normal += '<td><span style="color:red;">&#9744;</span></td>';
+                    } else {
+                        normal += '<td>-</td>';
+                    }
+                    normal += '<td>';
+                    if(ajson[i].performance!=null){normal += ajson[i].performance};
+                    normal += '</td>';
+                    normal += '<td>';
+                    if(ajson[i].participation!=null){normal += ajson[i].participation};
+                    normal += '</td>';
+                    normal += '<td>'+ajson[i].memo+'</td>';
+                    normal += '</tr>\n';
                 }
-                if (ajson[i].homework=='True') {
-                    out += '<td><span style="color:green;">&#9745;</span></td>';
-                } else if (ajson[i].homework=='False') {
-                    out += '<td><span style="color:red;">&#9744;</span></td>';
-                } else {
-                    out += '<td>&\empty;</td>';
+                else {
+                    // special lesson, like a test or a count of 0
+                    special += '<tr>';
+                    special += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].topic+'</a></td>';
+                    special += '<td>'+ajson[i].count+'</td>';
+                    if (ajson[i].attendant=='True' || ajson[i].attendant==null) {
+                        special += '<td><span style="color:green;">&#9745;</span></td>';
+                    } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='True')) {
+                        special += '<td><span style="color:green;">&#9744;</span></td>';
+                    } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='False')) {
+                        special += '<td><span style="color:red;">&#9744;</span></td>';
+                    } else {
+                        special += '<td>-</td>';
+                        console.log(ajson[i].attendant + ajson[i].excused);
+                    }
+                    if (ajson[i].homework=='True' || ajson[i].homework==null) {
+                        special += '<td><span style="color:green;">&#9745;</span></td>';
+                    } else if (ajson[i].homework=='False') {
+                        special += '<td><span style="color:red;">&#9744;</span></td>';
+                    } else {
+                        special += '<td>-</td>';
+                    }
+                    special += '<td>';
+                    if(ajson[i].performance!=null){special += ajson[i].performance};
+                    special += '</td>';
+                    special += '<td>';
+                    if(ajson[i].participation!=null){special += ajson[i].participation};
+                    special += '</td>';
+                    special += '<td>'+ajson[i].memo+'</td>';
+                    special += '</tr>\n';
                 }
-                out += '<td>'+ajson[i].participation+'</td>';
-                out += '<td>'+ajson[i].performance+'</td>';
-                out += '<td>'+ajson[i].memo+'</td>';
-                out += '</tr>\n';
             }
         }
+        out += '<table id="achievements">';
+        out += '<tr><th>Datum</th><th>&#128477;</th><th>A</th><th>H</th><th>F</th><th>M</th><th>Bemerkungen</th></tr>';
+        out += '<tr><td colspan="7"><h3>TODO: Gesamtberechnung</h3></td></tr>\n';
+        out += '<tr><td colspan="7"><h3>Sonderstunden</h3></td></tr>\n';
+        out += special;
+        out += '<tr><td colspan="7"><h3>reguläre Stunden</h3></td></tr>\n';
+        out += normal;
         out += '</table>';
         document.getElementById('attendances').innerHTML = out;
     })
