@@ -87,6 +87,8 @@ def newStudent():
 def sendStudent(sid):
     db = dbio.GmDb(dbfile)
     s = db.getStudent(sid)
+    if s is None:
+        return render_template('404.html', relroot='../'), 404
     if s['img'] is not None:
         img = b64encode(s['img']).decode('utf-8')
     else:
@@ -118,7 +120,7 @@ def sendStudentImg(sid):
     db = dbio.GmDb(dbfile)
     s = db.getStudent(sid)
     if s==None or s['img'] == None:
-        abort(404, 'File not found')
+        return render_template('404.html', relroot='../'), 404
     img = (s['img'])
     response = make_response(img)
     response.headers.set('Content-Type', 'image/jpeg')
@@ -132,7 +134,7 @@ def sendSmallStudentImg(sid):
     db = dbio.GmDb(dbfile)
     s = db.getStudent(sid)
     if s==None or s['img'] == None:
-        abort(404, 'File not found')
+        return render_template('404.html', relroot='../'), 404
     img = (s['img'])
     stream = BytesIO(img)
     im = Image.open(stream)
@@ -262,6 +264,10 @@ def deleteDbEntry():
     else:
         content = 'ERROR 500: SQL-Error: '+str(result)
     return content
+
+@app.errorhandler(404)
+def error_not_found(error):
+    return render_template('404.html'), 404
 
 # run it:
 

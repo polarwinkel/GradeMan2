@@ -29,7 +29,7 @@
     <p>
         Klassen:<ul>
         {% for c in sclasses %}
-            <li><a href="../class/{{ c['cid'] }}">{{ c['name'] }}</a></li>
+            <li><a href="../class/{{ c['cid'] }}">{{ c['name'] }} {{ c['subject'] }}</a></li>
         {% endfor %}
         </ul>
     </p>
