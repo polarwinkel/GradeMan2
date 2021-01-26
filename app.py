@@ -226,6 +226,8 @@ def updateDbEntry():
         result = db.updateClass(request.json)
     elif request.json['what'] == 'lesson':
         result = db.updateLesson(request.json)
+    elif request.json['what'] == 'attendances':
+        result = db.updateAttendances(request.json)
     elif request.json['what'] == 'memo':
         result = db.updateMemo(request.json)
     elif request.json['what'] == 'timetable':
