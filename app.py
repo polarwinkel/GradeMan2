@@ -179,6 +179,10 @@ def sendJson(what):
         cid = what[17:]
         if cid.isnumeric():
             out = db.getClassAttendances(cid)
+    elif what.startswith('studentAttendances/'):
+        sid = what[19:]
+        if sid.isnumeric():
+            out = db.getStudentAttendances(sid)
     elif what=='timetable':
         out = db.getTimetable()
     else:

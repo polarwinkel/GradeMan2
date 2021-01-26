@@ -125,6 +125,36 @@ class GmDb:
             result.append(s)
         return result
     
+    def getStudentAttendances(self, sid):
+        ''' get all addendances of a student '''
+        cursor = self._connection.cursor()
+        sqlTemplate = '''SELECT lid, cid, date, topic, count, 
+                attendant, excused, homework, performance, participation, attendances.memo 
+                FROM attendances LEFT JOIN lessons 
+                ON attendances.lid=lessons.id 
+                WHERE sid=?'''
+        cursor.execute(sqlTemplate, (sid, ))
+        atts = cursor.fetchall()
+        if atts is None:
+            return None
+        attendances = []
+        for att in atts:
+            a = {
+                        'lid'           : att[0],
+                        'cid'           : att[1],
+                        'date'          : att[2],
+                        'topic'         : att[3],
+                        'count'         : att[4],
+                        'attendant'     : att[5],
+                        'excused'       : att[6],
+                        'homework'      : att[7],
+                        'performance'   : att[8],
+                        'participation' : att[9],
+                        'memo'          : att[10]
+                    }
+            attendances.append(a)
+        return attendances
+    
     def newClass(self, c):
         ''' inserts a new class and returns it's id, -1 for error '''
         cursor = self._connection.cursor()

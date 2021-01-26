@@ -29,10 +29,11 @@
     <p>
         Klassen:<ul>
         {% for c in sclasses %}
-            <li><a href="../class/{{ c['cid'] }}">{{ c['name'] }} {{ c['subject'] }}</a></li>
+            <li><a href="../class/{{ c['cid'] }}">{{ c['name'] }} {{ c['subject'] }}</a> <a onclick="showAttendances({{ c['cid'] }})">Teilnahmen anzeigen</a></li>
         {% endfor %}
         </ul>
     </p>
+    <div id="attendances"></div>
 </div>
 <script src="../static/getFormJson.js"></script>
 <script src="../static/polalert.js"></script>
@@ -171,6 +172,54 @@ function showCsvImportForm() {
     ';
     document.getElementById('content').innerHTML = content;
     
+}
+function showAttendances(cid) {
+    out = '<h2>Leistungen</h2>';
+    var url = '../json/studentAttendances/'+s.sid;
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        else 
+            throw new Error('ERROR: Students could not be fetched from server!');
+    })
+    .then(function(ajson) {
+        out += '<table>';
+        out += '<tr><th>Datum</th><th>&#128477;</th><th>A</th><th>HA</th><th>F</th><th>M</th><th>Bemerkungen</th></tr>';
+        for (i=0; i<ajson.length; i++) {
+            if (ajson[i].cid == cid) {
+                out += '<tr>';
+                out += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].date+'</a></td>';
+                out += '<td>'+ajson[i].count+'</td>';
+                if (ajson[i].attendant=='True') {
+                    out += '<td><span style="color:green;">&#9745;</span></td>';
+                } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='True')) {
+                    out += '<td><span style="color:red;">&#9744;</span></td>';
+                } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='False')) {
+                    out += '<td><span style="color:red;">&#9744;</span></td>';
+                } else {
+                    out += '<td>&\empty;</td>';
+                    console.log(ajson[i].attendant + ajson[i].excused);
+                }
+                if (ajson[i].homework=='True') {
+                    out += '<td><span style="color:green;">&#9745;</span></td>';
+                } else if (ajson[i].homework=='False') {
+                    out += '<td><span style="color:red;">&#9744;</span></td>';
+                } else {
+                    out += '<td>&\empty;</td>';
+                }
+                out += '<td>'+ajson[i].participation+'</td>';
+                out += '<td>'+ajson[i].performance+'</td>';
+                out += '<td>'+ajson[i].memo+'</td>';
+                out += '</tr>\n';
+            }
+        }
+        out += '</table>';
+        document.getElementById('attendances').innerHTML = out;
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
 }
 
 if (s.sid == '') {
