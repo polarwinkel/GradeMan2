@@ -170,7 +170,11 @@ def sendJson(what):
     elif what.startswith('classLessons/'):
         cid = what[13:]
         if cid.isnumeric():
-            out = db.getClassLessons(cid)
+            ll = db.getClassLessons(cid)
+            for l in ll:
+                l['memo'] = mdTeX2html.convert(l['memo'])
+                l['details'] = mdTeX2html.convert(l['details'])
+            out = ll
     elif what.startswith('lessonAttendances/'):
         lid = what[18:]
         if lid.isnumeric():

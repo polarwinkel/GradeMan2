@@ -307,7 +307,7 @@ class GmDb:
     def getClassLessonsShort(self, cid):
         ''' get the lessons of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date DESC'''
+        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date'''
         cursor.execute(sqlTemplate, (cid, ))
         lessons = cursor.fetchall()
         if lessons is None:
@@ -326,7 +326,7 @@ class GmDb:
     def getClassLessons(self, cid):
         ''' get the lessons of a class '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date DESC'''
+        sqlTemplate = '''SELECT * FROM lessons WHERE cid=? ORDER BY date'''
         cursor.execute(sqlTemplate, (cid, ))
         lessons = cursor.fetchall()
         if lessons is None:

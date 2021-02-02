@@ -50,13 +50,16 @@ function edit() {
         <input type="hidden" id="cid" name="cid" class="formdata" />\
         <div style="clear:both;"><label for="name">Name: </label><input type="text" name="name" id="name" class="formdata" required /></div>\
         <div style="clear:both;"><label for="subject">Fach: </label><input type="text" name="subject" id="subject" class="formdata" required /></div>\
-        <div style="clear:both;"><label for="graduate">Oberstufe: </label><input type="checkbox" name="graduate" id="subject" class="formdata" /></div>\
+        <div style="clear:both;"><label for="graduate">Oberstufe: </label><input type="checkbox" name="graduate" id="graduate" class="formdata" /></div>\
         <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
         <input type="submit" value="Speichern" onclick="send()">\
     '
     document.getElementById('cid').value = c.cid;
     document.getElementById('name').value = c.name;
     document.getElementById('subject').value = c.subject;
+    if (c.graduate == 'on') {
+        document.getElementById('graduate').checked = true;
+    }
     document.getElementById('memo').innerHTML = c.memo;
 }
 function show() {
