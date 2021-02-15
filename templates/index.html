@@ -118,9 +118,9 @@ function showMemos() {
                 out += '<button onclick=deleteMemo('+m[i].mid+')>Löschen</button>';
                 out += '</div>';
             }
-            if (prio4) {
-                out += '</details>';
-            }
+        }
+        if (prio4) {
+            out += '</details>';
         }
     }
     document.getElementById('memos').innerHTML = out;
