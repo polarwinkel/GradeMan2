@@ -124,7 +124,6 @@ function renderRange(what, nr, graduate, val='-') {
         }
     } else {
         range.style.direction = 'rtl';
-        console.log(val);
         if (val!=null && !isNaN(val) && Number(val) >= 1 && Number(val) <= 6) {
             range.value = val;
             text.value = val;

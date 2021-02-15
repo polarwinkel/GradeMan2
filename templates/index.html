@@ -19,6 +19,9 @@
     div.prio3 {
         background-color: rgba(0,100,0,0.5);
     }
+    div.prio4 {
+        background-color: rgba(0,0,100,0.5);
+    }
     div.memo Button{
         min-width: 50px;
         width: 50%;
@@ -94,13 +97,30 @@ function showMemos() {
         out = 'Keine Notizen vorhanden!';
     } else {
         out = '';
+        prio4 = false;
         for (var i = 0; i < m.length; i++) {
-            out += '<div class="memo prio'+m[i].prio+'">';
-            out += '<p class="date">'+m[i].date+' | Prio '+m[i].prio+'</p>\n';
-            out += mdtex2html(m[i].memo);
-            out += '<button onclick=editMemo('+i+')>Bearbeiten</button>'
-            out += '<button onclick=deleteMemo('+m[i].mid+')>Löschen</button>'
-            out += '</div>';
+            if (m[i].prio < 4) {
+                out += '<div class="memo prio'+m[i].prio+'">';
+                out += '<p class="date">'+m[i].date+' | Prio '+m[i].prio+'</p>\n';
+                out += mdtex2html(m[i].memo);
+                out += '<button onclick=editMemo('+i+')>Bearbeiten</button>';
+                out += '<button onclick=deleteMemo('+m[i].mid+')>Löschen</button>';
+                out += '</div>';
+            } else {
+                if (prio4 == false) {
+                    out += '<details><summary>Archiv (Prio 4)</summary>';
+                    prio4 = true;
+                }
+                out += '<div class="memo prio'+m[i].prio+'">';
+                out += '<p class="date">'+m[i].date+' | Prio '+m[i].prio+'</p>\n';
+                out += mdtex2html(m[i].memo);
+                out += '<button onclick=editMemo('+i+')>Bearbeiten</button>';
+                out += '<button onclick=deleteMemo('+m[i].mid+')>Löschen</button>';
+                out += '</div>';
+            }
+            if (prio4) {
+                out += '</details>';
+            }
         }
     }
     document.getElementById('memos').innerHTML = out;
@@ -117,7 +137,7 @@ function addMemo() {
     document.getElementById('memos').innerHTML += out;
     // insert select-options for prio:
     var prio = document.getElementById('prio');
-    var options = ['1', '2', '3'];
+    var options = ['1', '2', '3', '4'];
     options.forEach(function(element,key) {
         if (element == '3') {
             prio[key] = new Option(element, element, true, true);
@@ -145,7 +165,7 @@ function editMemo(i) {
     document.getElementById('memos').innerHTML = out;
     // insert select-options for prio:
     var prio = document.getElementById('prio');
-    var options = ['1', '2', '3'];
+    var options = ['1', '2', '3', '4'];
     options.forEach(function(element,key) {
         if (element == m[i].prio) {
             prio[key] = new Option(element, element, true, true);
