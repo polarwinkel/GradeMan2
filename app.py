@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 #coding: utf-8
 '''
-experimental Flask wsgi-interface for GradeMan2
+Flask wsgi-interface for GradeMan2
 '''
 
 import os
