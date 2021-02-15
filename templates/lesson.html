@@ -111,7 +111,7 @@ function renderRange(what, nr, graduate, val='-') {
     var text = document.getElementById(what+'Text'+nr);
     var range = document.getElementById(what+'Range'+nr);
     if (graduate) {
-        if (val && !isNaN(val) && Number(val) >= 0 && Number(val) <= 15) {
+        if (val!=null && !isNaN(val) && Number(val) >= 0 && Number(val) <= 15) {
             range.value = val;
             text.value = val;
             var r = (15-val)*17;
@@ -125,7 +125,7 @@ function renderRange(what, nr, graduate, val='-') {
     } else {
         range.style.direction = 'rtl';
         console.log(val);
-        if (val && !isNaN(val) && Number(val) >= 1 && Number(val) <= 6) {
+        if (val!=null && !isNaN(val) && Number(val) >= 1 && Number(val) <= 6) {
             range.value = val;
             text.value = val;
             var r = (val-1)*51;
