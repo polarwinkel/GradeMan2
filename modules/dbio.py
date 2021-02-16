@@ -111,7 +111,11 @@ class GmDb:
     def getStudents(self):
         ''' get all students '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''SELECT id, givenname, familyname, gender FROM students ORDER BY familyname, givenname'''
+        sqlTemplate = '''SELECT id, givenname, familyname, gender FROM students ORDER BY
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                familyname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss'), 
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                givenname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss')'''
         cursor.execute(sqlTemplate)
         tlist = cursor.fetchall()
         result = []
@@ -133,7 +137,7 @@ class GmDb:
                 FROM attendances LEFT JOIN lessons 
                 ON attendances.lid=lessons.id 
                 WHERE sid=?
-                ORDER BY date DESC'''
+                ORDER BY date'''
         cursor.execute(sqlTemplate, (sid, ))
         atts = cursor.fetchall()
         if atts is None:
@@ -289,7 +293,11 @@ class GmDb:
         cursor = self._connection.cursor()
         sqlTemplate = '''SELECT sid, givenname, familyname, gender, memo 
                 FROM students LEFT JOIN studentclass ON students.id = studentclass.sid 
-                WHERE cid=? ORDER BY familyname, givenname'''
+                WHERE cid=? ORDER BY 
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                familyname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss'), 
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                givenname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss')'''
         students = cursor.execute(sqlTemplate, (cid, ))
         result = []
         for s in students:
@@ -349,7 +357,11 @@ class GmDb:
         cursor = self._connection.cursor()
         sqlTemplate = '''SELECT id AS sid, givenname, familyname FROM students
                 LEFT JOIN studentclass ON students.id=studentclass.sid WHERE cid=?
-                ORDER BY familyname, givenname'''
+                ORDER BY
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                familyname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss'), 
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                givenname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss')'''
         cursor.execute(sqlTemplate, (cid, ))
         stus = cursor.fetchall()
         if stus is None:
@@ -400,7 +412,11 @@ class GmDb:
         sqlTemplate = '''
                 SELECT * FROM (SELECT * FROM attendances WHERE lid=?) 
                 LEFT JOIN (SELECT id AS sid, givenname, familyname FROM students) 
-                USING(sid) ORDER BY familyname'''
+                USING(sid) ORDER BY
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                familyname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss'), 
+                REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(
+                givenname,'ä','ae'),'ö','oe'),'ü','ue'),'Ä','Ae'),'Ö','Oe'),'Ü','Ue'),'ß','ss')'''
         cursor.execute(sqlTemplate, (lid, ))
         attendances = cursor.fetchall()
         if attendances is None:
