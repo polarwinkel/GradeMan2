@@ -80,7 +80,7 @@ def newStudent():
     img = ''
     memo = ''
     classes = db.getClasses()
-    sclasses = db.getStudentClasses(sid)
+    sclasses = db.getStudentClasses(s['sid'])
     return render_template('student.html', relroot='../', s=s, memo=memo, img=img, sjson=s, classes=classes, sclasses=sclasses)
 
 @app.route('/student/<int:sid>', methods=['GET'])
