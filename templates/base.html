@@ -4,6 +4,7 @@
         <title>GradeMan School Manager</title>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="{{ relroot }}static/polar.css" />
         <link rel="stylesheet" type="text/css" href="{{ relroot }}static/main.css" />
         <link rel="icon" type="image/svg+xml" href="{{ relroot }}static/favicon.svg" sizes="any" />
         <script>
@@ -25,13 +26,15 @@
         </style>
     </head>
     <body id="body">
-        <p id="nav" class="no-print" style="width:100%; background-color:080; text-align:right;">
-            <a href="{{ relroot }}" style="font-size:0.6em;">Home</a> | 
-            <a onclick="location.reload()" style="font-size:0.6em;">neu laden</a> | 
-            <a href="{{ relroot }}data" style="font-size:0.6em;">Daten</a> | 
-            <a href="{{ relroot }}lesson/" style="font-size:0.6em;">neue Stunde</a> | 
-            <a href="{{ relroot }}mdTeXCheatsheet" style="font-size:0.6em;">mdTeX-Cheatsheet</a>
-        </p>
+        <div id="page">
+            <p id="nav" class="no-print" style="width:100%; background-color:080; text-align:right;">
+                <a href="{{ relroot }}" style="font-size:0.6em;">Home</a> | 
+                <a onclick="location.reload()" style="font-size:0.6em;">neu laden</a> | 
+                <a href="{{ relroot }}data" style="font-size:0.6em;">Daten</a> | 
+                <a href="{{ relroot }}lesson/" style="font-size:0.6em;">neue Stunde</a> | 
+                <a href="{{ relroot }}mdTeXCheatsheet" style="font-size:0.6em;">mdTeX-Cheatsheet</a>
+            </p>
         {% block content %}Content{% endblock %}
+        </div>
     </body>
 </html>

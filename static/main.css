@@ -1,13 +1,5 @@
-/* for proper form-sizing */
-* {
-  box-sizing: border-box;
-}
-/* basics */
 html {
     margin: 0.2em;
-    background-color: #040;
-    font-family: "latin modern roman", Garamond, Georgia, "Times New Roman", Times, sans-serif;
-    color: black;
     font-size: 1.2em;
 }
 body {
@@ -15,21 +7,12 @@ body {
     margin: auto;
     margin-top: 0.8rem;
     margin-bottom: 0.8rem;
-    background-color: white;
     padding: 0.4rem;
     padding-top: 1rem;
     padding-bottom: 1rem;
 }
 nav#pagenav {
     text-align: center;
-}
-a {
-    color:#060;
-    text-decoration: none;
-    cursor: pointer;
-}
-math {
-    font-size: 1rem;
 }
 img {
     max-width: 100%;
@@ -62,15 +45,11 @@ textarea {
     min-width:250px;
     height: 200px;
 }
-/* other stuff */
 button {
-    font-size: 1rem;
-    max-width:100%;
     min-width:250px;
+    max-width:100%;
 }
-p {
-    page-break-inside: avoid;
-}
+/* other stuff */
 div.border {
     border: 1px solid silver;
 }
@@ -86,9 +65,6 @@ p.date{
     padding: 0;
     margin: 0;
 }
-table {
-    background-color: #fff;
-}
 /* for desktops */
 @media only screen and (min-width: 981px) {
     html {
@@ -99,82 +75,5 @@ table {
         padding: 4em;
         padding-top: 1em;
         padding-bottom: 1em;
-    }
-}
-/* print */
-@page {
-    size: A4;
-    margin: 0;
-    margin-bottom: 1cm;
-}
-@page :first {
-    margin-top: 0;
-}
-@media print {
-    html, body {
-        width: 21cm;
-        height: 29.7cm;
-    }
-    .no-print, .no-print
-    {
-        display: none !important;
-    }
-}
-/* fonts */
-@font-face {
-    font-family: "latin modern roman";
-    src: url("lmroman10-regular.woff2") format('woff2');
-}
-
-@font-face {
-    font-family: "latin modern roman";
-    src: url("lmroman10-bold.woff2") format('woff2');
-    font-weight: bold;
-}
-
-@font-face {
-    font-family: "latin modern roman";
-    src: url("lmroman10-bolditalic.woff2") format('woff2');
-    font-weight: bold;
-    font-style: italic;
-}
-
-@font-face {
-    font-family: "latin modern roman";
-    src: url("lmroman10-italic.woff2") format('woff2');
-    font-style: italic;
-}
-/* dark-mode */
-@media (prefers-color-scheme: dark) {
-    body {
-        background-color: #222;
-        color: white;
-        border: 1px solid black;
-    }
-    textarea {
-        background-color: #333;
-        color: white;
-        border: 1px solid black;
-    }
-    input {
-        background-color: #333;
-        color: white;
-        border: 1px solid black;
-    }
-    select {
-        background-color: #444;
-        color: white;
-        border: 1px solid black;
-    }
-    button {
-        background-color: #444;
-        color: white;
-        border: 1px solid black;
-    }
-    a {
-        color:#4f4;
-    }
-    table {
-        background-color: #222;
     }
 }

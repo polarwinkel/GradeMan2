@@ -1,0 +1,126 @@
+/* for proper form-sizing */
+* {
+  box-sizing: border-box;
+}
+/* basics */
+html {
+    background-color: #040;
+    font-family: Latin Modern Roman, serif;
+    font-size: x-large;
+}
+body {
+    background-color: white;
+}
+a {
+    color:#060;
+    text-decoration: none;
+    cursor: pointer;
+}
+math {
+    font-family: Latin Modern Math
+    font-size: 1em;
+}
+div.blockformula {
+    text-align: center;
+}
+code {
+    border-radius: 0.3em;
+    background-color: rgba(127,127,127,0.4);
+}
+/* other stuff */
+table {
+    background-color: #fff;
+}
+/* forms */
+button {
+    font-size: 1em;
+    font-family: Latin Modern Roman, serif;
+}
+select {
+    font-size: 1em;
+    font-family: Latin Modern Roman, serif;
+}
+input {
+    font-size: 1em;
+    font-family: Latin Modern Roman, serif;
+}
+textarea {
+    font-size: 0.8em;
+    font-family: Latin Modern Mono, monospace;
+}
+/* print */
+@page {
+    margin: 2cm;
+}
+@media print {
+    html {
+        font-size: 12pt;
+    }
+    .no-print {
+        display: none !important;
+    }
+}
+/* fonts */
+@font-face {
+    font-family: Latin Modern Roman;
+    src: url("lmroman10-regular.woff2") format('woff2');
+}
+@font-face {
+    font-family: Latin Modern Roman;
+    src: url("lmroman10-bold.woff2") format('woff2');
+    font-weight: bold;
+}
+@font-face {
+    font-family: Latin Modern Roman;
+    src: url("lmroman10-bolditalic.woff2") format('woff2');
+    font-weight: bold;
+    font-style: italic;
+}
+@font-face {
+    font-family: Latin Modern Roman;
+    src: url("lmroman10-italic.woff2") format('woff2');
+    font-style: italic;
+}
+@font-face {
+    font-family: Latin Modern Mono;
+    src: url("lmmono10-regular.woff2") format('woff2');
+}
+@font-face {
+    font-family: Latin Modern Math;
+    src: local('Latin Modern Math'), local('LatinModernMath-Regular'), url("latinmodern-math.woff2") format('woff2');
+}
+/* dark-mode */
+@media (prefers-color-scheme: dark) {
+    html {
+        color: white;
+    }
+    body {
+        background-color: #222;
+    }
+    textarea {
+        background-color: #333;
+        color: white;
+        border: 1px solid black;
+    }
+    input {
+        background-color: #333;
+        color: white;
+        border: 1px solid black;
+    }
+    select {
+        background-color: #444;
+        color: white;
+        border: 1px solid black;
+    }
+    button {
+        background-color: #222;
+        color: white;
+        border: 1px solid black;
+    }
+    a {
+        color:#4f4;
+    }
+    table {
+        background-color: #222;
+    }
+}
