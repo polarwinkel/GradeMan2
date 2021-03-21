@@ -6,9 +6,9 @@ The Formulas will be in MathML-Format.
 block-equations need to start with $$ or \[
 inline-equations start with \( or $
 
-version 1.1
+version 1.1.1
 
-(c) 2020 by Dirk Winkel
+(c) 2020-2021 by Dirk Winkel
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -33,20 +33,20 @@ import re
 incomplete = '<font color="orange">Warning: Formula incomplete!</font>'
 convError = '<font color="red">ERROR converting TeX2mathml!</font>'
 
-def convert(mdtex):
-    ''' converts recursively the mdTeX-mixture to HTML with MathML '''
+def convert(mdtex, extensions=[]):
+    ''' converts recursively the Markdown-LaTeX-mixture to HTML with MathML '''
     found = False
     # find first $$-formula:
     parts = re.split('\${2}', mdtex, 2)
     if len(parts)>1:
         found = True
-        result = convert(parts[0])+'\n'
+        result = convert(parts[0], extensions)+'\n'
         try:
             result += '<div class="blockformula">'+tex2mathml(parts[1])+'</div>\n'
         except:
             result += '<div class="blockformula">'+convError+'</div>'
         if len(parts)==3:
-            result += convert(parts[2])
+            result += convert(parts[2], extensions)
         else:
             result += '<div class="blockformula">'+incomplete+'</div>'
     # else find first $-formulas:
@@ -59,24 +59,24 @@ def convert(mdtex):
         except:
             mathml = convError
         if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
-            parts[0]=parts[0]+' '
+            parts[0]=parts[0]+'&#x200b;'
         if len(parts)==3:
-            result = convert(parts[0]+mathml+parts[2])
+            result = convert(parts[0]+mathml+parts[2], extensions)
         else:
-            result = convert(parts[0]+mathml+incomplete)
+            result = convert(parts[0]+mathml+incomplete, extensions)
     # else find first \[..\]-equation:
     else:
         parts = re.split(r'\\\[', mdtex, 1)
     if len(parts)>1 and not found:
         found = True
-        result = convert(parts[0])+'\n'
+        result = convert(parts[0], extensions)+'\n'
         parts = re.split(r'\\\]', parts[1], 1)
         try:
             result += '<div class="blockformula">'+tex2mathml(parts[0])+'</div>\n'
         except:
             result += '<div class="blockformula">'+convError+'</div>'
         if len(parts)==2:
-            result += convert(parts[1])
+            result += convert(parts[1], extensions)
         else:
             result += '<div class="blockformula">'+incomplete+'</div>'
     # else find first \(..\)-equation:
@@ -90,12 +90,12 @@ def convert(mdtex):
         except:
             mathml = convError
         if parts[0].endswith('\n\n') or parts[0]=='': # make sure textblock starts before formula!
-            parts[0]=parts[0]+' '
+            parts[0]=parts[0]+'&#x200b;'
         if len(subp)==2:
-            result = convert(parts[0]+mathml+subp[1])
+            result = convert(parts[0]+mathml+subp[1], extensions)
         else:
-            result = convert(parts[0]+mathml+incomplete)
+            result = convert(parts[0]+mathml+incomplete, extensions)
     if not found:
         # no more formulas found
-        result = md2html(mdtex)
+        result = md2html(mdtex, extensions=extensions)
     return result

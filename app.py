@@ -12,8 +12,9 @@ from jinja2 import Template
 from base64 import b64encode, b64decode, decodebytes
 from io import BytesIO
 from PIL import Image
+import mdtex2html
 
-from modules import dbio, mdTeX2html
+from modules import dbio
 
 # global settings:
 
@@ -23,6 +24,8 @@ dbfile = "grademan.sqlite3"
 #webServerPort = 8085
 host='0.0.0.0'
 debug = True
+
+extensions=['def_list', 'fenced_code', 'tables', 'admonition', 'nl2br', 'sane_lists', 'toc']
 
 # routes:
 
@@ -56,7 +59,7 @@ def sendClass(cid):
     if c == None: # offer new class if not found in db
         c = {'cid':'', 'name':'', 'subject':'', 'graduate':'', 'memo':''}
         lShort = '[]'
-    memo = mdTeX2html.convert(c['memo'])
+    memo = mdtex2html.convert(c['memo'], extensions)
     return render_template('class.html', relroot='../', c=c, memo=memo, lShortJson=lShort)
 
 @app.route('/lesson/', methods=['GET'])
@@ -94,7 +97,7 @@ def sendStudent(sid):
     else:
         img = ''
     del s['img']
-    memo = mdTeX2html.convert(s['memo'])
+    memo = mdtex2html.convert(s['memo'], extensions)
     classes = db.getClasses()
     sclasses = db.getStudentClasses(sid)
     return render_template('student.html', relroot='../', s=s, memo=memo, img=img, sjson=s, classes=classes, sclasses=sclasses)
@@ -151,7 +154,7 @@ def sendSmallStudentImg(sid):
 def post_mdtex2html():
     postvars = request.data
     try:
-        return mdTeX2html.convert(postvars.decode("utf-8"))
+        return mdtex2html.convert(postvars.decode("utf-8"), extensions)
     except Exception as e:
         return 'ERROR: Could not convert the mdTeX to HTML:' + str(e)
 
@@ -172,8 +175,8 @@ def sendJson(what):
         if cid.isnumeric():
             ll = db.getClassLessons(cid)
             for l in ll:
-                l['memo'] = mdTeX2html.convert(l['memo'])
-                l['details'] = mdTeX2html.convert(l['details'])
+                l['memo'] = mdtex2html.convert(l['memo'], extensions)
+                l['details'] = mdtex2html.convert(l['details'], extensions)
             out = ll
     elif what.startswith('lessonAttendances/'):
         lid = what[18:]
@@ -196,7 +199,7 @@ def sendJson(what):
 @app.route('/mdtex2html', methods=['POST'])
 def sendMdTeX2html():
     try:
-        content = mdTeX2html.convert(request.data)
+        content = mdtex2html.convert(request.data, extensions)
     except Exception as e:
         content = 'ERROR: Could not convert the mdTeX to HTML:' + str(e)
     return(content)

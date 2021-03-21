@@ -8,9 +8,6 @@ html {
     font-family: Latin Modern Roman, serif;
     font-size: x-large;
 }
-body {
-    background-color: white;
-}
 a {
     color:#060;
     text-decoration: none;
@@ -30,6 +27,19 @@ code {
 /* other stuff */
 table {
     background-color: #fff;
+    border:1px solid #888;
+    border-collapse: collapse;
+}
+table tr {
+    border: 1px dashed #888;
+}
+table th {
+    border-right:1px solid #888; 
+    border-left:1px solid #888;
+}
+table td {
+    border-right:1px solid #888; 
+    border-left:1px solid #888;
 }
 /* forms */
 button {
@@ -93,9 +103,6 @@ textarea {
 @media (prefers-color-scheme: dark) {
     html {
         color: white;
-    }
-    body {
-        background-color: #222;
     }
     textarea {
         background-color: #333;

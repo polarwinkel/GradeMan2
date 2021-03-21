@@ -77,3 +77,9 @@ p.date{
         padding-bottom: 1em;
     }
 }
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #222;
+        border: 1px solid black;
+    }
+}
