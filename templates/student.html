@@ -219,7 +219,7 @@ function showAttendances(cid) {
                 if (!isNaN(parseFloat(ajson[i].count)) && isFinite(ajson[i].count) && (parseFloat(ajson[i].count)>0)) {
                     // normal lesson
                     normal += '<tr>';
-                    normal += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].date+'</a></td>';
+                    normal += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].date+': '+ajson[i].topic+'</a></td>';
                     normal += '<td>'+ajson[i].count+'</td>';
                     if (ajson[i].attendant=='True' || ajson[i].attendant==null) {
                         normal += '<td><span style="color:green;">&#9745;</span></td>';
