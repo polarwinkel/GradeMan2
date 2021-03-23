@@ -2,6 +2,7 @@
 
 {% block content %}
 <h1 id="title"></h1>
+<p class="date" id="ldate"></p>
 <nav id="pagenav">
     <p>Navigation wird geladen...</p>
 </nav>
@@ -15,6 +16,7 @@ var l = {{ ljson|tojson }};
 var c = {{ cjson|tojson }};
 
 title = document.getElementById('title');
+ldate = document.getElementById('ldate');
 pagenav = document.getElementById('pagenav');
 content = document.getElementById('content');
 
@@ -27,9 +29,7 @@ function mdtex2html(mdtex) {
 }
 
 function show() {
-    var out = '<h2>'+l.topic+'</h2>';
-    out += '<p class="date">'+l.date+'</p>\n';
-    out += '<p>Notizen:</p>\n<div class="border">'+mdtex2html(l.memo)+'</div>\n';
+    var out = '<p>Notizen:</p>\n<div class="border">'+mdtex2html(l.memo)+'</div>\n';
     out += '<p>Details/Skript:</p>\n<div class="border">'+mdtex2html(l.details)+'</div>\n';
     content.innerHTML = out;
 }
@@ -253,7 +253,8 @@ if (l.lid == '') {
             break;
         }
     }
-    title.innerHTML = 'Stunde von: '+cl.name+' '+cl.subject;
+    title.innerHTML = cl.name+' '+cl.subject+': '+l.topic;
+    ldate.innerHTML = l.date;
     pagenav.innerHTML = '\
         <a onclick="show()">Anzeigen</a> | \
         <a onclick="edit()">Bearbeiten</a> | \
