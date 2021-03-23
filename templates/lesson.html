@@ -139,7 +139,8 @@ function renderRange(what, nr, graduate, val='-') {
 }
 function renderAttendances(aa) {
     out = '<h2>Teilnahmen</h2>\n';
-    out = '<p id="showImages"><a onclick="showImages()">Bilder einblenden</a></p>\n';
+    out += '<p id="showImages"><a onclick="showImages()">Bilder einblenden</a></p>\n';
+    out += '<div onchange="this.style.backgroundColor=`rgba(127,127,0,0.2)`">';
     out += '<input type="hidden" id="what" name="what" class="formdata" value="attendances" />';
     out += '<div class="student"><div style="float:left; width:12rem; max-width:100%; font-weight:bold;">Vorname Nachname</div>\n';
     out += '<div style="float:left; width:1.5rem; font-weight:bold;">A</div>\n';
@@ -205,6 +206,7 @@ function renderAttendances(aa) {
         out += '</div>\n<hr style="clear:both;" />\n';
     }
     out += '<button onclick="saveAttendances()" style="clear:both;">Speichern</button><br />\n';
+    out += '</div>';
     out += '<p>Legende: A=Anwesend, E=Entschuldigt, H=Hausaufgabe, F=Fachliche Leistung, M=Mitarbeit</p>\n';
     content.innerHTML = out;
     for (var i=0; i<aa.length; i++) {
