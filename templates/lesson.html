@@ -221,6 +221,7 @@ function saveAttendances() {
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(formJson));
     if (xhr.responseText = 'ok') {
+        document.documentElement.scrollTop = 0;
         pa.message('Erfolgreich gespeichert!');
         showAttendances();
     } else {

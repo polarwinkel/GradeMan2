@@ -250,7 +250,7 @@ function showAttendances(cid) {
                 else {
                     // special lesson, like a test or a count of 0
                     special += '<tr>';
-                    special += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].topic+'</a></td>';
+                    special += '<td><a href="../lesson/'+ajson[i].lid+'">'+ajson[i].date+': '+ajson[i].topic+'</a></td>';
                     special += '<td>'+ajson[i].count+'</td>';
                     if (ajson[i].attendant=='True' || ajson[i].attendant==null) {
                         special += '<td><span style="color:green;">&#9745;</span></td>';
