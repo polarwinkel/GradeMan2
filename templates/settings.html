@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1 id="title" onclick="location.reload()">Einstellungen</h1>
+<div id="content">
+    <p>TODO</p>
+</div>
+<script>
+var settings = {{ settings|tojson }};
+
+</script>
+{% endblock %}

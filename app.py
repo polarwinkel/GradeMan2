@@ -14,18 +14,18 @@ from io import BytesIO
 from PIL import Image
 import mdtex2html
 
-from modules import dbio
+from modules import dbio, settingsio
 
 # global settings:
 
 app = Flask(__name__)
+settings = settingsio.settingsIo('settings.yaml')
 
-dbfile = "grademan.sqlite3"
-#webServerPort = 8085
-host='0.0.0.0'
-debug = True
-
-extensions=['def_list', 'fenced_code', 'tables', 'admonition', 'nl2br', 'sane_lists', 'toc']
+dbfile = settings.get('dbfile')
+host=settings.get('host')
+debug = settings.get('debug')
+# extensions to be used by python-markdown:
+extensions=settings.get('extensions')
 
 # routes:
 
@@ -115,6 +115,10 @@ def sendData():
 @app.route('/mdTeXCheatsheet', methods=['GET'])
 def sendMdTeXCheatSheet():
     return render_template('mdTeXCheatsheet.html', relroot='./')
+
+@app.route('/settings', methods=['GET'])
+def sendSettings():
+    return render_template('settings.html', relroot='./', settings=settings.getJson())
 
 @app.route('/getStudentImg/<int:sid>', methods=['GET'])
 @app.route('/getStudentImg/<int:sid>.jpg', methods=['GET'])
