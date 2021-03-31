@@ -18,7 +18,8 @@ class settingsIo:
             with open(sfile, 'w') as file:
                 yaml.dump(s, file)
         with open(sfile) as file:
-            self.s = yaml.full_load(file)
+            #self.s = yaml.full_load(file) #TODO: use this when available on all systems
+            self.s = yaml.safe_load(file)
     
     def get(self, key):
         '''returns the value to a settings key'''
