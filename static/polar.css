@@ -1,3 +1,4 @@
+/* v1.1.1 */
 /* for proper form-sizing */
 * {
   box-sizing: border-box;
@@ -12,6 +13,9 @@ a {
     color:#060;
     text-decoration: none;
     cursor: pointer;
+}
+blockquote {
+    font-size: smaller;
 }
 math {
     font-family: Latin Modern Math
@@ -57,6 +61,16 @@ input {
 textarea {
     font-size: 0.8em;
     font-family: Latin Modern Mono, monospace;
+}
+/* tooltips */
+.tooltip .tooltiptext {
+    display: none;
+}
+.tooltip:hover .tooltiptext {
+    display: inline;
+    border-radius: 0.3em;
+    background-color: #777;
+    position: fixed;
 }
 /* print */
 @page {
