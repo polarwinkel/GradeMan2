@@ -3,10 +3,86 @@
 {% block content %}
 <h1 id="title" onclick="location.reload()">Einstellungen</h1>
 <div id="content">
-    <p>TODO</p>
+    <h2>Basics</h2>
+    <div style="clear:both;">
+        <label for="date">Halbjahreswechsel: </label>
+        <input type="date" name="date" id="date" class="formdata" />
+    </div>
+    <div style="clear:both;">
+        <label for="dbfile">Datenbank-Datei: </label>
+        <input type="text" name="dbfile" id="dbfile" class="formdata" />
+        <p>Wird als Datenbank-Datei nur ein Dateiname (Default: <code>grademan.sqlite3</code>) eingetragen so befindet sich diese im Programmverzeichnis. Es kann auch ein absoluter Pfad auf dem Szstem angegeben werden, GradeMan muss dann dort schreibrechte haben.<br />
+        Falls die Datei nicht existiert wird diese als leere Datenbank angelegt.</p>
+        <p><b>Empfehlung: </b>Für jedes Schuljahr eine eigene Datenbank-Datei anlegen!</p>
+    </div>
+    <h2>Fortgeschrittene</h2>
+    <p>Einige der folgenden Einstellungen werden erst nach dem Neustart von GradeMan wirksam!</p>
+    <div style="clear:both;">
+        <label for="host">Host: </label>
+        <input type="text" name="host" id="host" class="formdata" />
+        <p>Wird für <code>Host</code> anstelle des Default <code>0.0.0.0</code> die IP-Adresse des Rechners eingetragen ist GradeMan aus dem gesamten Netz erreichbar!</p>
+    </div>
+    <h2>Hacker</h2>
+    <div style="clear:both;">
+        <label for="debug">debug</label>
+        <input type="checkbox" id="debug" name="debug" class="formdata" value="debug" /><br />
+    </div>
+    <p>verwendete python-markdown-extensions:</p>
+    <div style="clear:both;">
+        <label for="def_list">def_list</label>
+        <input type="checkbox" id="def_list" name="extensions" class="formdata" value="def_list" /><br />
+        <label for="fenced_code">fenced_code</label>
+        <input type="checkbox" id="fenced_code" name="extensions" class="formdata" value="fenced_code" checked /><br />
+        <label for="tables">tables</label>
+        <input type="checkbox" id="tables" name="extensions" class="formdata" value="tables" checked /><br />
+        <label for="admonition">admonition</label>
+        <input type="checkbox" id="admonition" name="extensions" class="formdata" value="admonition" /><br />
+        <label for="nl2br">nl2br</label>
+        <input type="checkbox" id="nl2br" name="extensions" class="formdata" value="nl2br" /><br />
+        <label for="sane_lists">sane_lists</label>
+        <input type="checkbox" id="sane_lists" name="extensions" class="formdata" value="sane_lists" /><br />
+        <label for="toc">toc</label>
+        <input type="checkbox" id="toc" name="extensions" class="formdata" value="toc" /><br />
+    </div>
+    <div style="clear:both;"><input type="submit" value="Speichern" onclick="send()"></div>
 </div>
+<script src="static/getFormJson.js"></script>
+<script src="../static/polalert.js"></script>
 <script>
-var settings = {{ settings|tojson }};
-
+var settings = JSON.parse({{ settings|tojson }});
+function load() {
+    document.getElementById('dbfile').value = settings.dbfile;
+    document.getElementById('host').value = settings.host;
+    if (settings.debug) document.getElementById('debug').checked = true;
+    document.getElementById('date').value = settings.date;
+    if (settings.extensions.includes('def_list'))
+            document.getElementById('def_list').checked = true;
+    if (settings.extensions.includes('fenced_code'))
+            document.getElementById('fenced_code').checked = true;
+    if (settings.extensions.includes('tables'))
+            document.getElementById('tables').checked = true;
+    if (settings.extensions.includes('admonition'))
+            document.getElementById('admonition').checked = true;
+    if (settings.extensions.includes('nl2br'))
+            document.getElementById('nl2br').checked = true;
+    if (settings.extensions.includes('sane_lists'))
+            document.getElementById('sane_lists').checked = true;
+    if (settings.extensions.includes('toc'))
+            document.getElementById('toc').checked = true;
+}
+load();
+function send() {
+    var xhr = new XMLHttpRequest();
+    var formJson = getFormJson();
+    xhr.open('PUT', 'updateSettings', false);
+    xhr.setRequestHeader('Content-Type', 'application/json');
+    xhr.send(JSON.stringify(formJson));
+    console.log(xhr.responseText);
+    if (xhr.responseText == 'ok') {
+        pa.message('Erfolgreich gespeichert!');
+    } else {
+        document.getElementById('content').innerHTML = xhr.responseText;
+    }
+}
 </script>
 {% endblock %}

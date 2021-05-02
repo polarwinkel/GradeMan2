@@ -34,6 +34,15 @@ class settingsIo:
         else:
             raise NameError('settings not found for '+str(key))
     
+    def set(self, setnew, sfile):
+        '''writes new settings to the settings-file'''
+        # TODO: integrity-check
+        with open(sfile, 'w') as file:
+            yaml.dump(setnew, file)
+        with open(sfile) as file:
+            #self.s = yaml.full_load(file) #TODO: use this when available on all systems
+            self.s = yaml.safe_load(file)
+    
     def getJson(self):
         '''returns settings as json-string'''
         return json.dumps(self.s)

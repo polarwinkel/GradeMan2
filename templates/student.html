@@ -107,7 +107,6 @@ function edit() {
 function send() {
     var xhr = new XMLHttpRequest();
     var formJson = getFormJson();
-    console.log(formJson);
     if (formJson.sid=='') {
         xhr.open('POST', '../newDbEntry', false);
     } else {
@@ -121,7 +120,7 @@ function send() {
         } else {
             window.location = xhr.responseText;
         }
-    } else if (xhr.responseText = 'ok') {
+    } else if (xhr.responseText == 'ok') {
         location.reload();
     } else {
         document.getElementById('content').innerHTML = xhr.responseText;

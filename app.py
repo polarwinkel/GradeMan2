@@ -18,14 +18,16 @@ from modules import dbio, settingsio
 
 # global settings:
 
+setfile = 'settings.yaml'
+
 app = Flask(__name__)
-settings = settingsio.settingsIo('settings.yaml')
+settings = settingsio.settingsIo(setfile)
 
 dbfile = settings.get('dbfile')
-host=settings.get('host')
+host = settings.get('host')
 debug = settings.get('debug')
 # extensions to be used by python-markdown:
-extensions=settings.get('extensions')
+extensions = settings.get('extensions')
 
 # routes:
 
@@ -255,6 +257,24 @@ def updateDbEntry():
         content = 'ok'
     else:
         content = 'ERROR 500: SQL-Error: '+str(result)
+    return content
+
+@app.route('/updateSettings', methods=['PUT'])
+def updateSettings():
+    setnew = request.json
+    if 'False' in setnew['extensions']:
+        setnew['extensions'] = list(dict.fromkeys(setnew['extensions']))
+        setnew['extensions'].remove('False')
+    settings.set(setnew, setfile)
+    global dbfile
+    dbfile = settings.get('dbfile')
+    global host
+    host = settings.get('host')
+    global debug
+    debug = settings.get('debug')
+    global extensions
+    extensions = settings.get('extensions')
+    content = 'ok'
     return content
 
 @app.route('/deleteDbEntry', methods=['DELETE'])

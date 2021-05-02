@@ -84,7 +84,7 @@ function send() {
         } else {
             window.location = xhr.responseText;
         }
-    } else if (xhr.responseText = 'ok') {
+    } else if (xhr.responseText == 'ok') {
         location.reload();
     } else {
         document.getElementById('content').innerHTML = xhr.responseText;
