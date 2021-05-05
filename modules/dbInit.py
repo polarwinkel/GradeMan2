@@ -4,7 +4,7 @@ Database-Init-file of TeXerBase - an Database Server for Exercises
 '''
 
 import sqlite3
-import os
+import os, sys
 import yaml
 
 def checkTables(db):
@@ -27,7 +27,7 @@ def checkTables(db):
         args.append('Failed to create students table')
         err.args = tuple(args)
         raise
-    # classes: name,subject,graduate,memo
+    # classes: name,subject,graduate,memo,seating
     cursor = db._connection.cursor()
     sql_command = '''
         CREATE TABLE IF NOT EXISTS classes (
@@ -35,7 +35,8 @@ def checkTables(db):
             name VARCHAR(256) NOT NULL,
             subject VARCHAR(256) NOT NULL,
             graduate BOOLEAN NOT NULL,
-            memo TEXT
+            memo TEXT,
+            seating TEXT
         );'''
     try:
         cursor.execute(sql_command)
@@ -44,6 +45,14 @@ def checkTables(db):
         args.append('Failed to create classes table')
         err.args = tuple(args)
         raise
+    # add colum for seating if not existing, TODO: remove this some day
+    sql_command = '''
+            ALTER TABLE classes ADD COLUMN seating TEXT;
+        '''
+    try:
+        cursor.execute(sql_command)
+    except sqlite3.OperationalError as err:
+        print(str(err), file=sys.stderr) # obviously the column is existing already
     # studentclass: sid,cid
     cursor = db._connection.cursor()
     sql_command = '''

@@ -167,7 +167,8 @@ class GmDb:
                     c['name'],
                     c['subject'],
                     c['graduate'],
-                    c['memo']
+                    c['memo'],
+                    c['seating']
                 )
         valueli = (
                     c['name'],
@@ -180,8 +181,8 @@ class GmDb:
         if result != None:
             return 'FAILED: Identical entry found with id %s, differ at least one: name or subject!' % str(result)
         sqlTemplate = '''INSERT INTO classes 
-                (name, subject, graduate, memo) 
-                VALUES (?, ?, ?, ?)'''
+                (name, subject, graduate, memo, seating) 
+                VALUES (?, ?, ?, ?, ?)'''
         try:
             cursor.execute(sqlTemplate, valuelist)
         except sqlite3.OperationalError as err:
@@ -208,6 +209,7 @@ class GmDb:
                     'subject'   : tup[2],
                     'graduate'  : tup[3],
                     'memo'      : tup[4],
+                    'seating'   : tup[5],
                 }
         return result
     
@@ -225,6 +227,7 @@ class GmDb:
                         'subject'   : tup[2],
                         'graduate'  : tup[3],
                         'memo'      : tup[4],
+                        'seating'   : tup[5],
                     }
             result.append(s)
         return result
@@ -232,13 +235,14 @@ class GmDb:
     def updateClass(self, c):
         ''' updates the db-entry for a class, returning 0 or error-string '''
         cursor = self._connection.cursor()
-        sqlTemplate = '''UPDATE classes SET name=?, subject=?, graduate=?, memo=? WHERE id=?'''
+        sqlTemplate = '''UPDATE classes SET name=?, subject=?, graduate=?, memo=?, seating=? WHERE id=?'''
         valuelist = (
                     c['name'],
                     c['subject'],
                     c['graduate'],
                     c['memo'],
-                    c['cid']
+                    c['seating'],
+                    c['cid'],
                 )
         try:
             cursor.execute(sqlTemplate, valuelist)

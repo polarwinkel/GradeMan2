@@ -8,6 +8,7 @@
     <a onclick="showLessons()">Curriculum</a> | 
     <a onclick="showDetails()">Skript</a> | 
     <a onclick="showStudents()">Schüler</a> | 
+    <a onclick="showSeating()">Sitzplan</a> | 
     <a onclick="learnNames()">Namen lernen</a> | 
     <a onclick="showAchievements()">Leistungen</a>
 </nav>
@@ -15,20 +16,39 @@
     {{ memo }}
 </div>
 <style>
-    table#achievements {
-        border:1px solid #888;
-        width:100%;
-        border-collapse: collapse;
+    div.showStudent {
+        border: 1px solid rgba(127,127,127,0.2);
+        float: left;
+        text-align: center;
+        width: 135px;
+        height:225px;
+        margin: 0.3rem;
     }
-    table#achievements tr { border: 1px dashed #888; }
+    table#seating td {
+        width: 105px;
+        height: 135px;
+        max-height: 135px;
+        text-align: center;
+        padding: 0;
+        margin: 0;
+    }
+    p.seating {
+        margin: 0;
+        padding: 0;
+    }
+    .seatingName {
+        margin:0;
+        margin-top: -2rem;
+        color: #fff;
+        text-shadow: 2px 2px #000;
+    }
+    table#achievements {
+        width:100%;
+    }
     table#achievements th {
-        border-right:1px solid #888; 
-        border-left:1px solid #888;
         line-height: 90%;
     }
     table#achievements td {
-        border-right:1px solid #888; 
-        border-left:1px solid #888;
     }
 </style>
 <script src="../static/getFormJson.js"></script>
@@ -52,6 +72,8 @@ function edit() {
         <div style="clear:both;"><label for="subject">Fach: </label><input type="text" name="subject" id="subject" class="formdata" required /></div>\
         <div style="clear:both;"><label for="graduate">Oberstufe: </label><input type="checkbox" name="graduate" id="graduate" class="formdata" /></div>\
         <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
+        <div style="clear:both; text-align:center;" id="seatingEditor"><br /><button onclick="seatingEditor()">Sitzplan-Editor laden</button></div>\
+        <div style="clear:both;"><label for="seating">CSV-Sitzplan:</label><textarea name="seating" id="seating" class="formdata"></textarea></div>\
         <input type="submit" value="Speichern" onclick="send()">\
     '
     document.getElementById('cid').value = c.cid;
@@ -61,6 +83,7 @@ function edit() {
         document.getElementById('graduate').checked = true;
     }
     document.getElementById('memo').innerHTML = c.memo;
+    document.getElementById('seating').innerHTML = c.seating;
 }
 function show() {
     if (c.cid == '') {
@@ -157,7 +180,7 @@ function showStudents() {
         out = '<h2>Alle Schüler</h2>\n';
         for (i=0; i<sjson.length; i++) {
             out += '\
-                <div style="border: 1px solid rgba(127,127,127,0.2); float: left; text-align:center; width: 135px; height:225px; margin: 0.3rem;"><a href="../student/'+sjson[i].sid+'">\
+                <div class="showStudent"><a href="../student/'+sjson[i].sid+'">\
                 '+sjson[i].givenname+'<br />'+sjson[i].familyname+'</a><br />\
                 <img src="../getStudentImg/small/'+sjson[i].sid+'" alt="'+sjson[i].givenname+'" /></div>';
         }
@@ -166,6 +189,60 @@ function showStudents() {
     .catch(function(err) {
         console.log(err);
     });
+}
+function nameFromId(sjson, sid) {
+    for (var i=0; i<=sjson.length; i++) {
+        if (sjson[i].sid == sid) return [sjson[i].givenname, sjson[i].familyname];
+    }
+}
+function renderSeating(sjson) {
+    out = '<table id="seating">';
+    var lines=c.seating.split('\n');
+    for (var i=0; i<lines.length; i++) {
+        out += '<tr>'
+        var items=lines[i].split(',');
+        for (var j=0; j<items.length; j++) {
+            if ((isNaN(items[j])) || (items[j]<=0)){
+                out += '<td></td>';
+            } else {
+                var name = nameFromId(sjson, items[j])
+                out += '<td><p class="seating">'
+                out += '<img src="../getStudentImg/small/'+items[j]+'" /></p>';
+                out += '<p class="seatingName"><a href="../student/'+items[j]+'" class="seatingName">'+name[0]+'</a></p></td>';
+            }
+        }
+        out += '</tr>\n';
+    }
+    out += '</table>\n';
+    return out;
+}
+function showSeating() {
+    var url = '../json/classStudents/'+c.cid;
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        else 
+            throw new Error('ERROR: Students could not be fetched from server!');
+    })
+    .then(function(sjson) {
+        out = '<h2>Sitzplan</h2>\n';
+        out += renderSeating(sjson);
+        content.innerHTML = out;
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+}
+function seatingEditor() {
+    var editor = document.getElementById('seatingEditor');
+    editor.style.border = '3px solid #888';
+    var out = '<p>TODO: Noch nicht implementiert!</p>';
+    out += '<p>Bis dahin kann der Sitzplan im CSV-Format erstellt werden:<br />\
+    Ein besetzter Platz erhält die Schülernummer (ermittelbar z.B. durch Anschauen des Links zur Schülerseite).<br />\
+    Plätze sind horizontal durch `,` getrennt, vertikal durch eine neue Zeile.<br />\
+    Es ergibt sich damit ein tabellarischer Sitzplan.</p>';
+    editor.innerHTML = out;
 }
 function learnNames() {
     var url = '../json/classStudents/'+c.cid;
