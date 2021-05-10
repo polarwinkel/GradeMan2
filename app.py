@@ -4,7 +4,7 @@
 Flask wsgi-interface for GradeMan2
 '''
 
-import os
+import os, sys
 import sqlite3
 from flask import Flask, render_template, request, send_from_directory, make_response, jsonify
 import json
@@ -211,10 +211,12 @@ def sendMdTeX2html():
     return(content)
 
 @app.route('/setStudentImg/<int:sid>', methods=['POST'])
-# TODO!
 def setStudentImg(sid):
     db = dbio.GmDb(dbfile)
-    data = request.form['img'].file.read()
+    print(str('hallo'), file=sys.stderr)
+    f = request.files['image']
+    # TODO: resize
+    data = f.read()
     db.updateStudentImg(data, sid)
     content = 'student/%s' % sid
     return content

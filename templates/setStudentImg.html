@@ -111,21 +111,25 @@ function uploadImage(source) {
         img = dataURItoBlob(dataURI);
         //var img = canvas.getContext('2d').drawImage('filename', 0, 0);
     } else if (source == 'upload') {
-        x = document.getElementById("uploadFile");
-        if (x.files.length == 0) {
+        uploadFile = document.getElementById("uploadFile");
+        if (uploadFile.files.length == 0) {
             alert('select a file!');
         } else {
-            console.log('sending '+x.files[0].name);
-            img = x.files[0];
+            console.log('sending '+uploadFile.files[0].name);
+            img = uploadFile.files[0];
         }
     }
-    formData.append("img", img);                                
+    formData.append("image", img);                                
     var xhr = new XMLHttpRequest();
     xhr.open("POST", '../setStudentImg/{{ sid }}');
     xhr.send(formData);
     xhr.onreadystatechange = function() {
         if (xhr.readyState == 4 && xhr.status == 200) {
             window.location = '../'+xhr.responseText;
+        } else {
+            console.log(xhr.readyState);
+            console.log(xhr.status);
+            console.log(xhr.responseText);
         }
     }
 }
