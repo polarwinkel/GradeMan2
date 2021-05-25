@@ -32,6 +32,8 @@ class settingsIo:
             return self.s['debug']
         elif key=='extensions':
             return self.s['extensions']
+        elif key=='dateHalfYear':
+            return self.s['dateHalfYear']
         else:
             raise NameError('settings not found for '+str(key))
     

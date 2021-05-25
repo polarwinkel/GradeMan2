@@ -62,7 +62,7 @@ def sendClass(cid):
         c = {'cid':'', 'name':'', 'subject':'', 'graduate':'', 'memo':''}
         lShort = '[]'
     memo = mdtex2html.convert(c['memo'], extensions)
-    return render_template('class.html', relroot='../', c=c, memo=memo, lShortJson=lShort)
+    return render_template('class.html', relroot='../', c=c, memo=memo, lShortJson=lShort, dateHalfYear=settings.get('dateHalfYear'))
 
 @app.route('/lesson/', methods=['GET'])
 def newLesson():

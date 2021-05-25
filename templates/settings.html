@@ -5,8 +5,8 @@
 <div id="content">
     <h2>Basics</h2>
     <div style="clear:both;">
-        <label for="date">Halbjahreswechsel: </label>
-        <input type="date" name="date" id="date" class="formdata" />
+        <label for="dateHalfYear">Halbjahreswechsel: </label>
+        <input type="date" name="dateHalfYear" id="dateHalfYear" class="formdata" />
     </div>
     <div style="clear:both;">
         <label for="dbfile">Datenbank-Datei: </label>
@@ -21,7 +21,8 @@
         <!-- TODO: implement in flask!
         <label for="password">Passwort: </label>
         <input type="text" name="password" id="password" class="formdata" />
-        -->
+        --><input type="hidden" name="password" id="password" class="formdata" />
+        
         <label for="host">Host: </label><br />
         <input type="text" name="host" id="host" class="formdata" />
         <p>Wird für <code>Host</code> anstelle des Default <code>0.0.0.0</code> die IP-Adresse des Rechners eingetragen ist GradeMan aus dem gesamten Netz erreichbar!</p>

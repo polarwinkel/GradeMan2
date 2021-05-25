@@ -56,6 +56,7 @@
 var c = {{ c|tojson }};
 var lShort = {{ lShortJson|tojson }};
 var content = document.getElementById('content');
+var dateHalfYear = Date.parse('{{ dateHalfYear }}');
 
 function mdtex2html(mdtex) {
     var xhr = new XMLHttpRequest();
@@ -299,18 +300,26 @@ function showAchievements() {
         special = '';
         normal = '';
         checks = '';
-        sMissedLessons = new Array(ajson.students.length).fill(0);
-        sUnexcused = new Array(ajson.students.length).fill(0);
-        sNoHomework = new Array(ajson.students.length).fill(0);
-        sPerformance = new Array(ajson.students.length).fill(0);
-        sPerformanceN = new Array(ajson.students.length).fill(0);
-        sParticipation = new Array(ajson.students.length).fill(0);
-        sParticipationN = new Array(ajson.students.length).fill(0);
+        sMissedLessons1 = new Array(ajson.students.length).fill(0);
+        sMissedLessons2 = new Array(ajson.students.length).fill(0);
+        sUnexcused1 = new Array(ajson.students.length).fill(0);
+        sUnexcused2 = new Array(ajson.students.length).fill(0);
+        sNoHomework1 = new Array(ajson.students.length).fill(0);
+        sNoHomework2 = new Array(ajson.students.length).fill(0);
+        sPerformance1 = new Array(ajson.students.length).fill(0);
+        sPerformance2 = new Array(ajson.students.length).fill(0);
+        sPerformanceN1 = new Array(ajson.students.length).fill(0);
+        sPerformanceN2 = new Array(ajson.students.length).fill(0);
+        sParticipation1 = new Array(ajson.students.length).fill(0);
+        sParticipation2 = new Array(ajson.students.length).fill(0);
+        sParticipationN1 = new Array(ajson.students.length).fill(0);
+        sParticipationN2 = new Array(ajson.students.length).fill(0);
         for (var i=0; i<ajson.attendances.length; i++) {
             if (ajson.attendances[i].lid == lShort[i].lid) {
                 count = lShort[i].count;
                 if (!isNaN(parseFloat(count)) && isFinite(count) && (parseFloat(count)>0)) {
                     // normal lesson
+                    var date = Date.parse(lShort[i].date);
                     normal += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
                     normal += '<td>'+lShort[i].count+'</td>\n';
                     checks += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'</a></td>\n';
@@ -325,29 +334,51 @@ function showAchievements() {
                         }
                         if (ajson.attendances[i][sid] != {} && ajson.attendances[i][sid].performance != null) {
                             normal += ajson.attendances[i][sid].performance+'<br />';
+                            // add it up:
                             if (!isNaN(parseFloat(ajson.attendances[i][sid].performance))) {
-                                sPerformance[j] = sPerformance[j] + (parseFloat(ajson.attendances[i][sid].performance)*parseFloat(count));
-                                sPerformanceN[j] = sPerformanceN[j] + parseFloat(count);
+                                if (dateHalfYear > date) {
+                                    sPerformance1[j] = sPerformance1[j] + (parseFloat(ajson.attendances[i][sid].performance)*parseFloat(count));
+                                    sPerformanceN1[j] = sPerformanceN1[j] + parseFloat(count);
+                                } else {
+                                    sPerformance2[j] = sPerformance2[j] + (parseFloat(ajson.attendances[i][sid].performance)*parseFloat(count));
+                                    sPerformanceN2[j] = sPerformanceN2[j] + parseFloat(count);
+                                }
                             }
                             normal += ajson.attendances[i][sid].participation+'</td>';
+                            // add it up:
                             if (!isNaN(parseFloat(ajson.attendances[i][sid].participation))) {
-                                sParticipation[j] = sParticipation[j] + (parseFloat(ajson.attendances[i][sid].participation)*parseFloat(count));
-                                sParticipationN[j] = sParticipationN[j] + parseFloat(count);
+                                if (dateHalfYear > date) {
+                                    sParticipation1[j] = sParticipation1[j] + (parseFloat(ajson.attendances[i][sid].participation)*parseFloat(count));
+                                    sParticipationN1[j] = sParticipationN1[j] + parseFloat(count);
+                                } else {
+                                    sParticipation2[j] = sParticipation2[j] + (parseFloat(ajson.attendances[i][sid].participation)*parseFloat(count));
+                                    sParticipationN2[j] = sParticipationN2[j] + parseFloat(count);
+                                }
                             }
                         } else {
                             normal += '-</td>';
                         }
-                        // create rows for checkes values (i.e. attendances):
+                        // create rows for checked values (i.e. attendances):
                         if (j % 5 == 0) {
                             checks += '<td style="background-color: rgba(8,8,8,0.4)">';
                         } else {
                             checks += '<td>';
                         }
                         if (ajson.attendances[i][sid].attendant=='False') {
-                            sMissedLessons[j] += parseFloat(count);
+                            // add it up:
+                            if (dateHalfYear > date) {
+                                sMissedLessons1[j] += parseFloat(count);
+                            } else {
+                                sMissedLessons2[j] += parseFloat(count);
+                            }
                             if (ajson.attendances[i][sid].excused=='False') {
                                 checks += '<span style="color:red;">&#9744;</span><br />';
-                                sUnexcused[j] += parseFloat(count);
+                                // add it up:
+                                if (dateHalfYear > date) {
+                                    sUnexcused1[j] += parseFloat(count);
+                                } else {
+                                    sUnexcused2[j] += parseFloat(count);
+                                }
                             } else {
                                 checks += '<span style="color:green;">&#9744;</span><br />';
                             }
@@ -356,7 +387,12 @@ function showAchievements() {
                         }
                         if (ajson.attendances[i][sid].homework=='False') {
                             checks += '<span style="color:red;">&#9744;</span>';
-                            sNoHomework[j] = sNoHomework[j] + 1;
+                            // add it up:
+                            if (dateHalfYear > date) {
+                                sNoHomework1[j] += 1;
+                            } else {
+                                sNoHomework2[j] += 1;
+                            }
                         } else {
                             checks += '&#9745;';
                         }
@@ -367,7 +403,7 @@ function showAchievements() {
                 }
                 else {
                     // special lesson, like a test or a count of 0
-                    special += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].topic+'</a></td>\n';
+                    special += '<tr><td><a href="../lesson/'+lShort[i].lid+'">'+lShort[i].date+'<br />'+lShort[i].topic+'</a></td>\n';
                     special += '<td>'+lShort[i].count+'</td>\n';
                     for (var j=0; j<ajson.students.length; j++) {
                         var sid = ajson.students[j].sid;
@@ -412,7 +448,7 @@ function showAchievements() {
             } else {
                 out += '<td>';
             }
-            out += (sMissedLessons[j]);
+            out += (sMissedLessons1[j]+'/'+sMissedLessons2[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
@@ -423,7 +459,7 @@ function showAchievements() {
             } else {
                 out += '<td>';
             }
-            out += (sUnexcused[j]);
+            out += (sUnexcused1[j]+'/'+sUnexcused2[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
@@ -434,40 +470,74 @@ function showAchievements() {
             } else {
                 out += '<td>';
             }
-            out += (sNoHomework[j]);
+            out += (sNoHomework1[j]+'/'+sNoHomework2[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Fachlich</td><td>-</td>\n';
+        out += '<tr><td>Fachlich 1. Hj.</td><td>-</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
             } else {
                 out += '<td>';
             }
-            if (sPerformanceN[j] > 0) {
-                out += (sPerformance[j]/sPerformanceN[j]).toFixed(1);
+            if (sPerformanceN1[j] > 0) {
+                out += (sPerformance1[j]/sPerformanceN1[j]).toFixed(1);
             } else {
                 out += '-';
             }
             out += '</td>\n';
         }
         out += '</tr>\n';
-        out += '<tr><td>Mitarbeit</td><td>-</td>\n';
+        if (dateHalfYear < Date.now()) {
+            out += '<tr><td>Fachlich 2. Hj.</td><td>-</td>\n';
+            for (var j=0; j<ajson.students.length; j++) {
+                if (j % 5 == 0) {
+                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
+                } else {
+                    out += '<td>';
+                }
+                if (sPerformanceN2[j] > 0) {
+                    out += (sPerformance2[j]/sPerformanceN2[j]).toFixed(1);
+                } else {
+                    out += '-';
+                }
+                out += '</td>\n';
+            }
+            out += '</tr>\n';
+        }
+        out += '<tr><td>Mitarbeit 1. Hj</td><td>-</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
                 out += '<td style="background-color: rgba(8,8,8,0.4)">';
             } else {
                 out += '<td>';
             }
-            if (sParticipationN[j] > 0) {
-                out += (sParticipation[j]/sParticipationN[j]).toFixed(1);
+            if (sParticipationN1[j] > 0) {
+                out += (sParticipation1[j]/sParticipationN1[j]).toFixed(1);
             } else {
                 out += '-';
             }
             out += '</td>\n';
         }
         out += '</tr>\n';
+        if (dateHalfYear < Date.now()) {
+            out += '<tr><td>Mitarbeit 2. Hj.</td><td>-</td>\n';
+            for (var j=0; j<ajson.students.length; j++) {
+                if (j % 5 == 0) {
+                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
+                } else {
+                    out += '<td>';
+                }
+                if (sParticipationN2[j] > 0) {
+                    out += (sParticipation2[j]/sParticipationN2[j]).toFixed(1);
+                } else {
+                    out += '-';
+                }
+                out += '</td>\n';
+            }
+            out += '</tr>\n';
+        }
         // special lessons:
         out += '<tr><td colspan="'+(ajson.students.length+2)+'"><h3>Sonderstunden</h3></td></tr>\n';
         out += '<tr><th>Thema</th><th>&#128477;</th>\n';
