@@ -156,14 +156,6 @@ def sendSmallStudentImg(sid):
     response.headers.set('Content-Disposition', '', filename='%s.jpg' % sid)
     return response
 
-@app.route('/mdtex2html', methods=['POST'])
-def post_mdtex2html():
-    postvars = request.data
-    try:
-        return mdtex2html.convert(postvars.decode("utf-8"), extensions)
-    except Exception as e:
-        return 'ERROR: Could not convert the mdTeX to HTML:' + str(e)
-
 @app.route('/json/<path:what>', methods=['GET'])
 # TODO: split this up to separate routes
 def sendJson(what):
@@ -203,12 +195,12 @@ def sendJson(what):
     return jsonify(out)
 
 @app.route('/mdtex2html', methods=['POST'])
-def sendMdTeX2html():
+def post_mdtex2html():
+    postvars = request.data
     try:
-        content = mdtex2html.convert(request.data, extensions)
+        return mdtex2html.convert(postvars.decode("utf-8"), extensions)
     except Exception as e:
-        content = 'ERROR: Could not convert the mdTeX to HTML:' + str(e)
-    return(content)
+        return 'ERROR: Could not convert the mdTeX to HTML:' + str(e)
 
 @app.route('/setStudentImg/<int:sid>', methods=['POST'])
 def setStudentImg(sid):
