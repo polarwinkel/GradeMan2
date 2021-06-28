@@ -69,32 +69,39 @@ function mdtex2html(mdtex) {
 }
 
 function edit() {
-    content = '\
-        <input type="hidden" id="what" name="what" class="formdata" value="student" />\
-        <input type="hidden" id="sid" name="sid" class="formdata" />\
-        <div style="clear:both;"><label for="givenname">Vorname: </label><input type="text" name="givenname" id="givenname" class="formdata" required /></div>\
-        <div style="clear:both;"><label for="familyname">Nachname: </label><input type="text" name="familyname" id="familyname" class="formdata" required /></div>\
-        <div style="clear:both;"><label for="gender">Geschlecht: </label><select id="gender" name="gender" class="formdata">\
-            <option value="None" id="None">unbekannt</option>\
-            <option value="male" id="male">männlich</option>\
-            <option value="female" id="female">weiblich</option>\
-            <option value="other" id="other">andere</option>\
-        </select></div>\
-        <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
-        <p style="clear:both;">\
-        {% for c in classes %}\
-            <label for="cid{{ c["cid"] }}">{{ c["name"] }} {{ c["subject"] }}</label>\
-            {% if c in sclasses %}\
-                <input type="checkbox" id="cid{{ c["cid"] }}" name="cids" class="formdata" value="{{ c["cid"] }}" checked /><br />\n\
-            {% else %}\
-                <input type="checkbox" id="cid{{ c["cid"] }}" name="cids" class="formdata" value="{{ c["cid"] }}" /><br />\n\
-            {% endif %}\
-        {% endfor %}\
-        </p>\
-        <div style="clear:both; text-align:center;">\
-        </div>\
-        <input type="submit" value="Speichern" onclick="send()">\
-    '
+    content = `
+        <input type="hidden" id="what" name="what" class="formdata" value="student" />
+        <input type="hidden" id="sid" name="sid" class="formdata" />
+        <div style="clear:both;"><label for="givenname">Vorname: </label><input type="text" name="givenname" id="givenname" class="formdata" required /></div>
+        <div style="clear:both;"><label for="familyname">Nachname: </label><input type="text" name="familyname" id="familyname" class="formdata" required /></div>
+        <div style="clear:both;"><label for="gender">Geschlecht: </label><select id="gender" name="gender" class="formdata">
+            <option value="None" id="None">unbekannt</option>
+            <option value="male" id="male">männlich</option>
+            <option value="female" id="female">weiblich</option>
+            <option value="other" id="other">andere</option>
+        </select></div>
+        <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>
+        <p style="clear:both;">
+        {% set ns = namespace(inClass=false) %}
+        {% for c in classes %}
+            <label for="cid{{ c['cid'] }}">{{ c['name'] }} {{ c['subject'] }}</label>
+            {% set ns.inClass = false %}
+            {% for d in sclasses %}
+                {% if c['cid'] == d['cid'] %}
+                    {% set ns.inClass = true %}
+                {% endif %}
+            {% endfor %}
+            {% if ns.inClass %}
+                <input type="checkbox" id="cid{{ c['cid'] }}" name="cids" class="formdata" value="{{ c['cid'] }}" checked /><br />
+            {% else %}
+                <input type="checkbox" id="cid{{ c['cid'] }}" name="cids" class="formdata" value="{{ c['cid'] }}" /><br />
+            {% endif %}
+        {% endfor %}
+        </p>
+        <div style="clear:both; text-align:center;">
+        </div>
+        <input type="submit" value="Speichern" onclick="send()">
+    `
     document.getElementById('content').innerHTML = content;
     document.getElementById('sid').value = s.sid;
     document.getElementById('givenname').value = s.givenname;
