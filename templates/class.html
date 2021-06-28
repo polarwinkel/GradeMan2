@@ -440,7 +440,7 @@ function showAchievements() {
         out += '<tr><th></th><th>&#128477;</th>\n';
         out += head;
         out += '</tr>\n'
-        out += '<tr><td colspan="'+(ajson.students.length+2)+'"><h3>Gesamtberechnung</h3></td></tr>\n';
+        out += '<tr><td colspan="'+(ajson.students.length+2)+'"><h3>Gesamtberechnung 1. Halbjahr</h3></td></tr>\n';
         out += '<tr><td>Fehlstunden</td><td>&Sigma;</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
@@ -448,7 +448,7 @@ function showAchievements() {
             } else {
                 out += '<td>';
             }
-            out += (sMissedLessons1[j]+'/'+sMissedLessons2[j]);
+            out += (sMissedLessons1[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
@@ -459,7 +459,7 @@ function showAchievements() {
             } else {
                 out += '<td>';
             }
-            out += (sUnexcused1[j]+'/'+sUnexcused2[j]);
+            out += (sUnexcused1[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
@@ -470,7 +470,7 @@ function showAchievements() {
             } else {
                 out += '<td>';
             }
-            out += (sNoHomework1[j]+'/'+sNoHomework2[j]);
+            out += (sNoHomework1[j]);
             out += '</td>\n';
         }
         out += '</tr>\n';
@@ -489,23 +489,6 @@ function showAchievements() {
             out += '</td>\n';
         }
         out += '</tr>\n';
-        if (dateHalfYear < Date.now()) {
-            out += '<tr><td>Fachlich 2. Hj.</td><td>-</td>\n';
-            for (var j=0; j<ajson.students.length; j++) {
-                if (j % 5 == 0) {
-                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
-                } else {
-                    out += '<td>';
-                }
-                if (sPerformanceN2[j] > 0) {
-                    out += (sPerformance2[j]/sPerformanceN2[j]).toFixed(1);
-                } else {
-                    out += '-';
-                }
-                out += '</td>\n';
-            }
-            out += '</tr>\n';
-        }
         out += '<tr><td>Mitarbeit 1. Hj</td><td>-</td>\n';
         for (var j=0; j<ajson.students.length; j++) {
             if (j % 5 == 0) {
@@ -522,7 +505,56 @@ function showAchievements() {
         }
         out += '</tr>\n';
         if (dateHalfYear < Date.now()) {
-            out += '<tr><td>Mitarbeit 2. Hj.</td><td>-</td>\n';
+            out += '<tr><td colspan="'+(ajson.students.length+2)+'"><h3>Gesamtberechnung 2. Halbjahr</h3></td></tr>\n';
+            out += '<tr><td>Fehlstunden</td><td>&Sigma;</td>\n';
+            for (var j=0; j<ajson.students.length; j++) {
+                if (j % 5 == 0) {
+                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
+                } else {
+                    out += '<td>';
+                }
+                out += (sMissedLessons2[j]);
+                out += '</td>\n';
+            }
+            out += '</tr>\n';
+            out += '<tr><td>Unentschuldigt</td><td>&Sigma;</td>\n';
+            for (var j=0; j<ajson.students.length; j++) {
+                if (j % 5 == 0) {
+                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
+                } else {
+                    out += '<td>';
+                }
+                out += (sUnexcused2[j]);
+                out += '</td>\n';
+            }
+            out += '</tr>\n';
+            out += '<tr><td>keine Hausaufgaben</td><td>&Sigma;</td>\n';
+            for (var j=0; j<ajson.students.length; j++) {
+                if (j % 5 == 0) {
+                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
+                } else {
+                    out += '<td>';
+                }
+                out += (sNoHomework2[j]);
+                out += '</td>\n';
+            }
+            out += '</tr>\n';
+            out += '<tr><td>Fachlich </td><td>-</td>\n';
+            for (var j=0; j<ajson.students.length; j++) {
+                if (j % 5 == 0) {
+                    out += '<td style="background-color: rgba(8,8,8,0.4)">';
+                } else {
+                    out += '<td>';
+                }
+                if (sPerformanceN2[j] > 0) {
+                    out += (sPerformance2[j]/sPerformanceN2[j]).toFixed(1);
+                } else {
+                    out += '-';
+                }
+                out += '</td>\n';
+            }
+            out += '</tr>\n';
+            out += '<tr><td>Mitarbeit</td><td>-</td>\n';
             for (var j=0; j<ajson.students.length; j++) {
                 if (j % 5 == 0) {
                     out += '<td style="background-color: rgba(8,8,8,0.4)">';
