@@ -10,7 +10,8 @@ class settingsIo:
     def __init__(self, sfile):
         if not os.path.exists(sfile):
             s = {}
-            s['dbfile'] = "grademan.sqlite3"
+            home = os.path.expanduser('~')
+            s['dbfile'] = home+'/grademan.sqlite3'
             #webServerPort = 8085
             s['host']='0.0.0.0'
             s['debug'] = True

@@ -1,12 +1,14 @@
-#!/bin/python3
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
 import wx.adv
 import wx
 import webbrowser
 import subprocess
-from os import popen
-TRAY_TOOLTIP = 'GradeMan2' 
+from os import popen, chdir
+TRAY_TOOLTIP = 'GradeMan2'
 TRAY_ICON = 'static/favicon.svg' 
 
+chdir("GradeMan2")
 
 def create_menu_item(menu, label, func):
     item = wx.MenuItem(menu, -1, label)

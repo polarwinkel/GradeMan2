@@ -1,0 +1,16 @@
+Package: grademan2
+Version: 2.0.0
+Architecture: all
+Maintainer: Dirk Winkel <it@polarwinkel.de>
+Installed-Size: 425
+Depends: python3 (>= 3.7.0), python3-jinja2 (>= 2.10.0), python3-wxgtk4.0 (>= 4.0.0)
+Section: utils
+Priority: optional
+Homepage: https://polarwinkel.de/grademan.html
+Description: Ein Schüler- Noten- und Unterrichtsmanager für Lehrer.
+ GradeMan2 vereint Stundenverwaltung, Notengebung, Anwesenheitskontrolle, 
+ automatische Zusammenfassungen wie Durchschnittsnoten etc. in einer 
+ Datenbank.
+ Die Benutzeroberfläche ist im Browser und adaptiert damit automatisch 
+ alle modernen Möglichkeiten des Browsers wie Lesezeichenverwaltung, 
+ Textsuche u.v.m.

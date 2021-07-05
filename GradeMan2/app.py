@@ -18,7 +18,8 @@ from modules import dbio, settingsio
 
 # global settings:
 
-setfile = 'settings.yaml'
+home = os.path.expanduser('~')
+setfile = home+'/.GradeMan2conf.yaml'
 
 app = Flask(__name__)
 settings = settingsio.settingsIo(setfile)

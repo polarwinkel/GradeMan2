@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=GradeMan2
+Version=2.0.0
+Comment=Noten- und Unterrichtsmanager
+GenericName=GradeMan2
+Terminal=false
+Icon=GradeMan2Icon.png
+Type=Application
+Exec=/usr/bin/grademan2
+Categories=Education;
