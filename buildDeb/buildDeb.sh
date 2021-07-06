@@ -23,6 +23,7 @@ sed -i 's/chdir("GradeMan2")/chdir("\/usr\/share\/grademan2")/' build/grademan2_
 cd build/
 
 # TODO: rm all __pycache__
+rm -r grademan2_$version/usr/share/grademan2/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/latex2mathml/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/mdtex2html/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/modules/__pycache__/
@@ -39,6 +40,10 @@ chmod -R =0755 grademan2_$version/usr/bin/grademan2
 #chmod -R =0755 grademan_$version/usr/share/grademan/*.py
 
 # package files:
+chmod =0644 grademan2_$version/usr/share/grademan2/latex2mathml/*
+chmod =0644 grademan2_$version/usr/share/grademan2/static/*
+chmod =0644 grademan2_$version/usr/share/grademan2/templates/*
+chmod =0644 grademan2_$version/usr/share/pixmaps/*
 chmod =0644 grademan2_$version/usr/share/doc/grademan2/*
 chmod =0644 grademan2_$version/usr/share/man/man1/*
 chmod =0644 grademan2_$version/usr/share/applications/*
