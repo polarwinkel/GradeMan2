@@ -18,23 +18,24 @@ from modules import dbio, settingsio
 
 # global settings:
 
-home = os.path.expanduser('~')
-setfile = home+'/.GradeMan2conf.yaml'
+#def __init__(setfile='GradeMan2conf.yaml', port='4202'):
+setfile='GradeMan2conf.yaml'
+port=4202
 
+# start-stuff:
 app = Flask(__name__)
 settings = settingsio.settingsIo(setfile)
-
 dbfile = settings.get('dbfile')
 host = settings.get('host')
 debug = settings.get('debug')
-# extensions to be used by python-markdown:
-extensions = settings.get('extensions')
+extensions = settings.get('extensions') # python-markdown extensions
 
 # routes:
 
 @app.route('/', methods=['GET'])
 def index():
     '''show index-page'''
+    # TODO: return settings if first run (no database)
     db = dbio.GmDb(dbfile)
     m = db.getMemos()
     t = db.getTimetable()
@@ -302,4 +303,4 @@ def error_not_found(error):
 # run it:
 
 if __name__ == '__main__':
-    app.run(host=host, debug=debug)
+    app.run(host=host, port=port, debug=debug)

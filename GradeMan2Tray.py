@@ -4,11 +4,14 @@ import wx.adv
 import wx
 import webbrowser
 import subprocess
-from os import popen, chdir
+import os
 TRAY_TOOLTIP = 'GradeMan2'
 TRAY_ICON = 'static/favicon.svg' 
 
-chdir("GradeMan2")
+os.chdir("GradeMan2")
+port = 4202
+home = os.path.expanduser('~')
+conffile = home+'/.GradeMan2conf.yaml'
 
 def create_menu_item(menu, label, func):
     item = wx.MenuItem(menu, -1, label)
@@ -36,7 +39,7 @@ class TaskBarIcon(wx.adv.TaskBarIcon):
         self.SetIcon(icon, TRAY_TOOLTIP)
     
     def on_start(self, event):
-        webbrowser.open('http://localhost:5000')
+        webbrowser.open('http://localhost:'+str(port))
     
     def on_left_down(self, event):
         print('This is GradeMan2 Taskbar server')
@@ -54,10 +57,11 @@ class App(wx.App):
 
 def main():
     server = App(False)
-    #flask = popen('gunicorn --bind 0.0.0.0:5000 app:app')
-    subprocess.Popen(['python3', 'app.py'])
+    #p = os.popen('gunicorn3 app:app -w 1 -b localhost:'+str(port)+' -n GradeMan2')
+    #p = subprocess.call(['gunicorn3', 'app:app', '-w 1', '-b localhost:'+str(port), '-n GradeMan2'])
+    p = subprocess.call(['waitress-serve', '--port='+str(port), 'app:app'])
+    #p = subprocess.Popen(['python3', 'app.py'])
     server.MainLoop()
-
 
 if __name__ == '__main__':
     main()
