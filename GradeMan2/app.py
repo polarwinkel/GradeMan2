@@ -18,13 +18,13 @@ from modules import dbio, settingsio
 
 # global settings:
 
-#def __init__(setfile='GradeMan2conf.yaml', port='4202'):
-setfile='GradeMan2conf.yaml'
+home = os.path.expanduser('~')
+conffile=home+'/.GradeMan2conf.yaml'
 port=4202
 
 # start-stuff:
 app = Flask(__name__)
-settings = settingsio.settingsIo(setfile)
+settings = settingsio.settingsIo(conffile)
 dbfile = settings.get('dbfile')
 host = settings.get('host')
 debug = settings.get('debug')
@@ -261,7 +261,7 @@ def updateSettings():
     if 'False' in setnew['extensions']:
         setnew['extensions'] = list(dict.fromkeys(setnew['extensions']))
         setnew['extensions'].remove('False')
-    settings.set(setnew, setfile)
+    settings.set(setnew, conffile)
     global dbfile
     dbfile = settings.get('dbfile')
     global host

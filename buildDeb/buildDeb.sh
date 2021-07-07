@@ -19,15 +19,19 @@ cp -ru usr/ build/grademan2_$version/
 mkdir -p build/grademan2_$version/usr/share/grademan2/
 cp -ru ../GradeMan2/* build/grademan2_$version/usr/share/grademan2/
 cp -ru ../GradeMan2Tray.py build/grademan2_$version/usr/bin/grademan2
-sed -i 's/chdir("GradeMan2")/chdir("\/usr\/share\/grademan2")/' build/grademan2_$version/usr/bin/grademan2
+
+#sys.path.append(os.getcwd()+'/GradeMan2')
+sed -i "s/^sys\.path\.append(os\.getcwd()+'\/GradeMan2')/sys\.path\.append('\/usr\/share\/grademan2\/')/" build/grademan2_$version/usr/bin/grademan2
+sed -i "s/^os\.chdir('GradeMan2')/os\.chdir('\/usr\/share\/grademan2')/" build/grademan2_$version/usr/bin/grademan2
 cd build/
 
-# TODO: rm all __pycache__
+# TODO: rm all __pycache__ and possible files
 rm -r grademan2_$version/usr/share/grademan2/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/latex2mathml/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/mdtex2html/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/modules/__pycache__/
 rm -r grademan2_$version/usr/share/grademan2/grademan.sqlite3
+rm -r grademan2_$version/usr/share/grademan2/GradeMan2conf.yaml
 
 # set file rights:
 #chown -R dirk:dirk grademan2_$version/

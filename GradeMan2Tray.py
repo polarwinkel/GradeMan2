@@ -4,14 +4,21 @@ import wx.adv
 import wx
 import webbrowser
 import subprocess
-import os
+import os, sys
+from waitress import serve
+from multiprocessing import Process
+
+sys.path.append(os.getcwd()+'/GradeMan2')
+import app
+
+os.chdir('GradeMan2')
+
 TRAY_TOOLTIP = 'GradeMan2'
 TRAY_ICON = 'static/favicon.svg' 
 
-os.chdir("GradeMan2")
-port = 4202
 home = os.path.expanduser('~')
 conffile = home+'/.GradeMan2conf.yaml'
+port = 4202
 
 def create_menu_item(menu, label, func):
     item = wx.MenuItem(menu, -1, label)
@@ -55,13 +62,20 @@ class App(wx.App):
         TaskBarIcon(frame)
         return True
 
+def runServer():
+    serve(app.app, host='0.0.0.0', port=port)
+
 def main():
-    server = App(False)
     #p = os.popen('gunicorn3 app:app -w 1 -b localhost:'+str(port)+' -n GradeMan2')
     #p = subprocess.call(['gunicorn3', 'app:app', '-w 1', '-b localhost:'+str(port), '-n GradeMan2'])
-    p = subprocess.call(['waitress-serve', '--port='+str(port), 'app:app'])
+    #p = subprocess.call(['waitress-serve', '--port='+str(port), 'app:app'])
+    #serve(app.app, host='0.0.0.0', port=port)
     #p = subprocess.Popen(['python3', 'app.py'])
-    server.MainLoop()
+    server = Process(target=runServer)
+    server.start()
+    tray = App(False)
+    tray.MainLoop()
+    server.terminate()
 
 if __name__ == '__main__':
     main()

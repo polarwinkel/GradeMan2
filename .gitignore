@@ -1,0 +1,9 @@
+*.sqlite3
+*.pyc
+*.pyo
+settings.yaml
+GradeMan2conf.yaml
+.GradeMan2conf.yaml
+*.deb
+*.exe
+__pycache__/
