@@ -7,12 +7,16 @@ import subprocess
 import os, sys
 from waitress import serve
 import multiprocessing as mp
+import platform
 
 sys.path.append(os.getcwd()+'/GradeMan2')
 import app
 
 TRAY_TOOLTIP = 'GradeMan2'
-TRAY_ICON = 'static/favicon.svg' 
+if platform.system()=='Linux':
+    TRAY_ICON = 'static/favicon.svg'
+else:
+    TRAY_ICON = 'static/favicon.ico'
 
 home = os.path.expanduser('~')
 conffile = home+'/.GradeMan2conf.yaml'
