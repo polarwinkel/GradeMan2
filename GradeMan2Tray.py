@@ -6,12 +6,10 @@ import webbrowser
 import subprocess
 import os, sys
 from waitress import serve
-from multiprocessing import Process
+import multiprocessing as mp
 
 sys.path.append(os.getcwd()+'/GradeMan2')
 import app
-
-os.chdir('GradeMan2')
 
 TRAY_TOOLTIP = 'GradeMan2'
 TRAY_ICON = 'static/favicon.svg' 
@@ -71,11 +69,13 @@ def main():
     #p = subprocess.call(['waitress-serve', '--port='+str(port), 'app:app'])
     #serve(app.app, host='0.0.0.0', port=port)
     #p = subprocess.Popen(['python3', 'app.py'])
-    server = Process(target=runServer)
+    server = mp.Process(target=runServer)
     server.start()
     tray = App(False)
     tray.MainLoop()
     server.terminate()
 
 if __name__ == '__main__':
+    mp.set_start_method('spawn') # Windows always spawns, never forks processes :-(
+    os.chdir('GradeMan2')
     main()

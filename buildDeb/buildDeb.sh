@@ -22,7 +22,7 @@ cp -ru ../GradeMan2Tray.py build/grademan2_$version/usr/bin/grademan2
 
 #sys.path.append(os.getcwd()+'/GradeMan2')
 sed -i "s/^sys\.path\.append(os\.getcwd()+'\/GradeMan2')/sys\.path\.append('\/usr\/share\/grademan2\/')/" build/grademan2_$version/usr/bin/grademan2
-sed -i "s/^os\.chdir('GradeMan2')/os\.chdir('\/usr\/share\/grademan2')/" build/grademan2_$version/usr/bin/grademan2
+sed -i "s/    os\.chdir('GradeMan2')/    os\.chdir('\/usr\/share\/grademan2')/" build/grademan2_$version/usr/bin/grademan2
 cd build/
 
 # TODO: rm all __pycache__ and possible files
