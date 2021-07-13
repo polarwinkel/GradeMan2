@@ -7,4 +7,4 @@ GradeMan2conf.yaml
 *.deb
 *.exe
 __pycache__/
-buildExe/build/
+buildExe/work/
