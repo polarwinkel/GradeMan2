@@ -498,7 +498,6 @@ class GmDb:
         cursor.execute(sqlTemplate, valuelist)
         result = cursor.fetchone()[0]
         self.newAttendances(result)
-        # TODO: create attendances
         return result
     
     def getLesson(self, lid):

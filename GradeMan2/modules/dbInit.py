@@ -46,13 +46,13 @@ def checkTables(db):
         err.args = tuple(args)
         raise
     # add colum for seating if not existing, TODO: remove this some day
-    sql_command = '''
-            ALTER TABLE classes ADD COLUMN seating TEXT;
-        '''
-    try:
-        cursor.execute(sql_command)
-    except sqlite3.OperationalError as err:
-        print(str(err), file=sys.stderr) # obviously the column is existing already
+    #sql_command = '''
+    #        ALTER TABLE classes ADD COLUMN seating TEXT;
+    #    '''
+    #try:
+    #    cursor.execute(sql_command)
+    #except sqlite3.OperationalError as err:
+    #    print(str(err), file=sys.stderr) # obviously the column is existing already
     # studentclass: sid,cid
     cursor = db._connection.cursor()
     sql_command = '''

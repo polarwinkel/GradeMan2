@@ -2,7 +2,9 @@
 
 # Script to build GradeMan2-deb-file
 # insert apropriate version no:
-version='2.0.0'
+version='dev'
+
+echo 'TODO: sed the version to all files where necessary'
 
 echo '=== building GradeMan2 version '$version' ==='
 
