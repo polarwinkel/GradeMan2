@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 '''
-Database-IO-file of TeXerBase - an Database Server for Exercises
+Settings-IO-file of GradeMan2
 '''
 
 import yaml, os, json
@@ -14,7 +14,7 @@ class settingsIo:
             s['dbfile'] = home+'/grademan.sqlite3'
             #webServerPort = 8085
             s['host']='0.0.0.0'
-            s['debug'] = True
+            s['debug'] = False
             # extensions to be used by python-markdown:
             s['extensions']=['def_list', 'fenced_code', 'tables', 'admonition', 'nl2br', 'sane_lists', 'toc']
             with open(sfile, 'w') as file:
