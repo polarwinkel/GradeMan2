@@ -259,15 +259,19 @@ function showAttendances(cid) {
                     normal += '<td>';
                     if(ajson[i].performance!=null){
                         normal += ajson[i].performance
-                        sumPerformance += parseFloat(ajson[i].performance)*parseFloat(ajson[i].count);
-                        nPerformance += parseFloat(ajson[i].count);
+                        if (!isNaN(parseFloat(ajson[i].performance))) {
+                            sumPerformance += parseFloat(ajson[i].performance)*parseFloat(ajson[i].count);
+                            nPerformance += parseFloat(ajson[i].count);
+                        }
                     };
                     normal += '</td>';
                     normal += '<td>';
                     if(ajson[i].participation!=null){
                         normal += ajson[i].participation
-                        sumParticipation += parseFloat(ajson[i].participation)*parseFloat(ajson[i].count);
-                        nParticipation += parseFloat(ajson[i].count);
+                        if (!isNaN(parseFloat(ajson[i].participation))) {
+                            sumParticipation += parseFloat(ajson[i].participation)*parseFloat(ajson[i].count);
+                            nParticipation += parseFloat(ajson[i].count);
+                        }
                     };
                     normal += '</td>';
                     normal += '<td>'+ajson[i].memo+'</td>';
