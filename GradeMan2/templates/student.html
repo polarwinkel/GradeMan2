@@ -218,8 +218,17 @@ function showAttendances(cid) {
             throw new Error('ERROR: Students could not be fetched from server!');
     })
     .then(function(ajson) {
-        normal = '';
-        special = '';
+        var normal = '';
+        var special = '';
+        var sumPerformance = 0;
+        var sumParticipation = 0;
+        var nPerformance = 0;
+        var nParticipation = 0
+        var nHomework = 0;
+        var nMissing = 0;
+        var nExcused = 0;
+        var weightSpecial = 0;
+        var sumSpecial = 0;
         for (i=0; i<ajson.length; i++) {
             if (ajson[i].cid == cid) {
                 if (!isNaN(parseFloat(ajson[i].count)) && isFinite(ajson[i].count) && (parseFloat(ajson[i].count)>0)) {
@@ -231,24 +240,35 @@ function showAttendances(cid) {
                         normal += '<td><span style="color:green;">&#9745;</span></td>';
                     } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='True')) {
                         normal += '<td><span style="color:green;">&#9744;</span></td>';
+                        nMissing = nMissing+parseFloat(ajson[i].count);
+                        nExcused = nExcused+parseFloat(ajson[i].count);
                     } else if ((ajson[i].attendant=='False') && (ajson[i].excused=='False')) {
                         normal += '<td><span style="color:red;">&#9744;</span></td>';
+                        nMissing = nMissing+parseFloat(ajson[i].count);
                     } else {
                         normal += '<td>-</td>';
-                        console.log(ajson[i].attendant + ajson[i].excused);
                     }
                     if (ajson[i].homework=='True' || ajson[i].homework==null) {
                         normal += '<td><span style="color:green;">&#9745;</span></td>';
                     } else if (ajson[i].homework=='False') {
                         normal += '<td><span style="color:red;">&#9744;</span></td>';
+                        nHomework += 1;
                     } else {
                         normal += '<td>-</td>';
                     }
                     normal += '<td>';
-                    if(ajson[i].performance!=null){normal += ajson[i].performance};
+                    if(ajson[i].performance!=null){
+                        normal += ajson[i].performance
+                        sumPerformance += parseFloat(ajson[i].performance)*parseFloat(ajson[i].count);
+                        nPerformance += parseFloat(ajson[i].count);
+                    };
                     normal += '</td>';
                     normal += '<td>';
-                    if(ajson[i].participation!=null){normal += ajson[i].participation};
+                    if(ajson[i].participation!=null){
+                        normal += ajson[i].participation
+                        sumParticipation += parseFloat(ajson[i].participation)*parseFloat(ajson[i].count);
+                        nParticipation += parseFloat(ajson[i].count);
+                    };
                     normal += '</td>';
                     normal += '<td>'+ajson[i].memo+'</td>';
                     normal += '</tr>\n';
@@ -276,19 +296,45 @@ function showAttendances(cid) {
                         special += '<td>-</td>';
                     }
                     special += '<td>';
-                    if(ajson[i].performance!=null){special += ajson[i].performance};
+                    if(ajson[i].performance!=null){
+                        special += ajson[i].performance
+                        if (
+                                ajson[i].count.endsWith('%') 
+                                && !isNaN(parseFloat(ajson[i].count.substring(0, ajson[i].count.length - 1)))
+                                && !isNaN(parseFloat(ajson[i].performance))) {
+                            var wSpe = parseFloat(ajson[i].count.substring(0, ajson[i].count.length - 1))/100;
+                            sumSpecial = sumSpecial*weightSpecial + wSpe*parseFloat(ajson[i].performance);
+                            weightSpecial += wSpe;
+                        }
+                    };
                     special += '</td>';
                     special += '<td>';
-                    if(ajson[i].participation!=null){special += ajson[i].participation};
+                    if(ajson[i].participation!=null){
+                        special += ajson[i].participation
+                    };
                     special += '</td>';
                     special += '<td>'+ajson[i].memo+'</td>';
                     special += '</tr>\n';
                 }
             }
         }
+        console.log(nMissing);
+        out += '<h3>Gesamtberechnung</h3>';
+        out += '<table id="sumAchievements">';
+        out += '<tr><th>Fehlend</th><th>Entschuldigt</th><th>Ha</th><th>Schriftlich</th><th>Gew. Schriftl.</th><th>Leistung</th><th>Mitarbeit</th><th>Gesamt</th></tr>';
+        out += '<tr>';
+        out += '<td>'+(nMissing)+'</td>';
+        out += '<td>'+(nExcused)+'</td>';
+        out += '<td>'+(nHomework)+'</td>';
+        out += '<td>'+(sumSpecial/weightSpecial)+'</td>';
+        out += '<td>'+(weightSpecial)+'</td>';
+        out += '<td>'+(sumPerformance/nPerformance)+'</td>';
+        out += '<td>'+(sumParticipation/nParticipation)+'</td>';
+        out += '<td>'+(sumSpecial+(sumPerformance/nPerformance)*(1-weightSpecial)/2+(sumParticipation/nParticipation)*(1-weightSpecial)/2)+'</td>';
+        out += '</tr></table>';
+        out += '<h3>Einzelleistungen</h3>';
         out += '<table id="achievements">';
         out += '<tr><th>Datum</th><th>&#128477;</th><th>A</th><th>H</th><th>F</th><th>M</th><th>Bemerkungen</th></tr>';
-        out += '<tr><td colspan="7"><h3>TODO: Gesamtberechnung</h3></td></tr>\n';
         out += '<tr><td colspan="7"><h3>Sonderstunden</h3></td></tr>\n';
         out += special;
         out += '<tr><td colspan="7"><h3>reguläre Stunden</h3></td></tr>\n';
