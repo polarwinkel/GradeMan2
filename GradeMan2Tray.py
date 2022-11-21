@@ -12,7 +12,7 @@ import platform
 sys.path.append(os.getcwd()+'/GradeMan2')
 import app
 
-version = '2.0.0'
+version = '2.1.0'
 
 TRAY_TOOLTIP = 'GradeMan2'
 if platform.system()=='Linux':
