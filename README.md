@@ -8,9 +8,11 @@ Lehrer- und Notenassistent
 
 GradeMan2 ist die komplett neue Version des seit einem Jahrzehnt bewährten Unterrichts- und Notenmanagers GradeMan. Die ultimative Unterrichtsmanagement-Lösung für Lehrer!
 
+Im Gegensatz zum [GradeMan Classic](https://github.com/polarwinkel/GradeMan/), der eher als Ein-Rechner-Lösung gedacht war, ist GradeMan2 auf den Einsatz als persönliche Cloud-Lösung optimiert, mit responsive design, dark-mode, integrierter Schülerbild-Kamera etc.. Aber auch als PC-Lösung ist GradeMan2 ebenfalls einsetzbar.
+
 #### [English]
 
-GradeMan2 is the all-new version of the GradeMan schoon management system for teachers.
+GradeMan2 is the all-new version of the GradeMan school management system for teachers.
 
 As long as nobody else translates this it will only be available in german language. Please contact me if you want to make a translation!
 
@@ -23,7 +25,7 @@ Ich habe GradeMan2 schon das ganze Schuljahr 2020/21 in Prokuktiveinsatz, alle F
 Meine ToDo-Liste:
 
 - Bereitstellung einer Windows-exe-Datei oder eines Windows-Installers
-- berechnete Notenvorschläge für die Halbjahre
+- ~~berechnete Notenvorschläge für die Halbjahre~~
 - Sitzplaneditor (bislang: Sitzpläne müssen manuell als CSV erstellt werden, siehe Doku in GradeMan2)
 
 ## Wie kann ich GradeMan2 verwenden?
