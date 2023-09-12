@@ -182,12 +182,15 @@ def sendJson(what):
         if cid.isnumeric():
             ll = db.getClassLessons(cid)
             l = {}
-            l['lid'] = str(ll[-1]['lid'])
-            l['date'] = str(ll[-1]['date'])
-            l['topic'] = str(ll[-1]['topic'])
-            l['memo'] = mdtex2html.convert(ll[-1]['memo'], extensions)
-            l['details'] = mdtex2html.convert(ll[-1]['details'], extensions)
-            out = l
+            try:
+                l['lid'] = str(ll[-1]['lid'])
+                l['date'] = str(ll[-1]['date'])
+                l['topic'] = str(ll[-1]['topic'])
+                l['memo'] = mdtex2html.convert(ll[-1]['memo'], extensions)
+                l['details'] = mdtex2html.convert(ll[-1]['details'], extensions)
+                out = l
+            except IndexError:
+                out = {'lid':'', 'date':'', 'topic':'', 'memo':'', 'details':''}
     elif what.startswith('classLessons/'):
         cid = what[13:]
         if cid.isnumeric():
