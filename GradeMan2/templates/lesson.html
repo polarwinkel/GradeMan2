@@ -46,9 +46,10 @@ function showLastLesson(cid) {
     .then(function(lcl) {
         console.log(lcl);
         document.getElementById('lastLesson').innerHTML = '<h2>letzte Stunde:</h2>';
-        document.getElementById('lastLesson').innerHTML += ('<p>Datum: <a href="'+relroot+'lesson/'+lcl.lid+'">'+lcl.date+'</a></p>');
-        document.getElementById('lastLesson').innerHTML += ('<p>Notizen:<br />'+lcl.memo+'</p>');
-        document.getElementById('lastLesson').innerHTML += ('<p>Details/Skript:<br />'+lcl.details+'</p>');
+        document.getElementById('lastLesson').innerHTML += ('<h3>Datum: <a href="'+relroot+'lesson/'+lcl.lid+'">'+lcl.date+'</a></h3>');
+        document.getElementById('lastLesson').innerHTML += ('<h3>Thema: '+lcl.topic+'</h3>');
+        document.getElementById('lastLesson').innerHTML += ('<h3>Notizen</h3>'+lcl.memo);
+        document.getElementById('lastLesson').innerHTML += ('<h3>Details/Skript</h3>'+lcl.details);
     })
     .catch(function(err) {
         console.log(err);
@@ -59,7 +60,7 @@ function edit() {
         <input type="hidden" id="what" name="what" class="formdata" value="lesson" />\
         <input type="hidden" id="lid" name="lid" class="formdata" />\
         <div style="clear:both;"><label for="date">Datum: </label><input type="date" name="date" id="date" class="formdata" required /></div>\
-        <div style="clear:both;"><label for="cid">Klasse: </label><select name="cid" id="cid" class="formdata smallSelect" required></select></div>\
+        <div style="clear:both;"><label for="cid">Klasse: </label><select name="cid" id="cid" class="formdata smallSelect" onchange="showLastLesson(this.value)" required></select></div>\
         <div style="clear:both;"><label for="topic">Thema: </label><input type="text" name="topic" id="topic" class="formdata" /></div>\
         <div style="clear:both;"><label for="count">Faktor: </label><select name="count" id="count" class="formdata smallSelect"></select></div>\
         <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
