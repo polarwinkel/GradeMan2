@@ -73,6 +73,13 @@ def newLesson():
     c = db.getClasses()
     return render_template('lesson.html', relroot='../', ljson=l, cjson=c)
 
+@app.route('/lesson/class/<int:cid>', methods=['GET'])
+def newClassLesson(cid):
+    db = dbio.GmDb(dbfile)
+    l = {'lid':'', 'date':'', 'cid':cid, 'topic':'', 'count':'', 'memo':'', 'details':''}
+    c = db.getClasses()
+    return render_template('lesson.html', relroot='../../', ljson=l, cjson=c)
+
 @app.route('/lesson/<int:lid>', methods=['GET'])
 def sendLesson(lid):
     db = dbio.GmDb(dbfile)
@@ -170,6 +177,17 @@ def sendJson(what):
         cid = what[14:]
         if cid.isnumeric():
             out = db.getClassStudents(cid)
+    elif what.startswith('classLesson/'):
+        cid = what[12:]
+        if cid.isnumeric():
+            ll = db.getClassLessons(cid)
+            l = {}
+            l['lid'] = str(ll[-1]['lid'])
+            l['date'] = str(ll[-1]['date'])
+            l['topic'] = str(ll[-1]['topic'])
+            l['memo'] = mdtex2html.convert(ll[-1]['memo'], extensions)
+            l['details'] = mdtex2html.convert(ll[-1]['details'], extensions)
+            out = l
     elif what.startswith('classLessons/'):
         cid = what[13:]
         if cid.isnumeric():

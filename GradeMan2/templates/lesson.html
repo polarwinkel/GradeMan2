@@ -9,11 +9,12 @@
 <div id="content">
     <p>Seiteninhalt wird geladen...</p>
 </div>
-<script src="../static/getFormJson.js"></script>
-<script src="../static/polalert.js"></script>
+<script src="{{ relroot }}static/getFormJson.js"></script>
+<script src="{{ relroot }}static/polalert.js"></script>
 <script>
 var l = {{ ljson|tojson }};
 var c = {{ cjson|tojson }};
+var relroot = '{{ relroot }}';
 
 title = document.getElementById('title');
 ldate = document.getElementById('ldate');
@@ -33,6 +34,26 @@ function show() {
     out += '<p>Details/Skript:</p>\n<div class="border">'+mdtex2html(l.details)+'</div>\n';
     content.innerHTML = out;
 }
+function showLastLesson(cid) {
+    var url = relroot+'json/classLesson/'+cid;
+    fetch(url).then(function(response) {
+        if (response.ok) {
+            return response.json();
+        }
+        else 
+            return '(keine vergangene Stunde für den Kurs gefunden)';
+    })
+    .then(function(lcl) {
+        console.log(lcl);
+        document.getElementById('lastLesson').innerHTML = '<h2>letzte Stunde:</h2>';
+        document.getElementById('lastLesson').innerHTML += ('<p>Datum: <a href="'+relroot+'lesson/'+lcl.lid+'">'+lcl.date+'</a></p>');
+        document.getElementById('lastLesson').innerHTML += ('<p>Notizen:<br />'+lcl.memo+'</p>');
+        document.getElementById('lastLesson').innerHTML += ('<p>Details/Skript:<br />'+lcl.details+'</p>');
+    })
+    .catch(function(err) {
+        console.log(err);
+    });
+}
 function edit() {
     content.innerHTML = '\
         <input type="hidden" id="what" name="what" class="formdata" value="lesson" />\
@@ -44,6 +65,7 @@ function edit() {
         <div style="clear:both;"><label for="memo">Notizen: </label><textarea name="memo" id="memo" class="formdata"></textarea></div>\
         <div style="clear:both;"><label for="details">Details/Skript: </label><textarea name="details" id="details" class="formdata"></textarea></div>\
         <div style="clear:both;"><input type="submit" value="Speichern" onclick="send()"></div>\
+        <div style="clear:both;" id="lastLesson"></div>\
     '
     document.getElementById('lid').value = l.lid;
     document.getElementById('date').value = l.date;
@@ -51,6 +73,10 @@ function edit() {
     if (l.lid == '') {
         for (var i=0; i < c.length; i++) {
             cid[c[i].cid] = new Option(c[i].name+' '+c[i].subject, c[i].cid);
+            if (l.cid == c[i].cid) {
+                cid[c[i].cid].selected = true;
+                showLastLesson(c[i].cid);
+            }
         }
     } else {
         cid[0] = new Option(cl.name+' '+cl.subject, l.cid, true, true);
@@ -72,9 +98,9 @@ function send() {
     var xhr = new XMLHttpRequest();
     var formJson = getFormJson();
     if (formJson.lid=='') {
-        xhr.open('POST', '../newDbEntry', false);
+        xhr.open('POST', relroot+'newDbEntry', false);
     } else {
-        xhr.open('PUT', '../updateDbEntry', false);
+        xhr.open('PUT', relroot+'updateDbEntry', false);
     }
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(formJson));
@@ -92,7 +118,7 @@ function send() {
 }
 // attendances:
 function showAttendances() {
-    var url = '../json/lessonAttendances/'+l.lid;
+    var url = relroot+'json/lessonAttendances/'+l.lid;
     fetch(url).then(function(response) {
         if (response.ok) {
             return response.json();
@@ -170,7 +196,7 @@ function renderAttendances(aa) {
         out += '<div class="img" id="'+aa[i].sid+'" style="float:left;"></div>\n<div class="student">\n';
         out += '<input type="hidden" name="lid" class="formdata" value="'+aa[i].lid+'" />';
         out += '<input type="hidden" name="sid" class="formdata" value="'+aa[i].sid+'" />';
-        out += '<div style="float:left; width:12rem; max-width:100%%;">'+'<a href="../student/'+aa[i].sid+'">\
+        out += '<div style="float:left; width:12rem; max-width:100%%;">'+'<a href="'+relroot+'student/'+aa[i].sid+'">\
                 '+aa[i].givenname+' '+aa[i].familyname+'</a></div>\n';
         if (aa[i].attendant == 'False') 
             out += '<div style="float:left; width:1.5rem;"><input type="checkbox" name="attendant" class="formdata" value="True" /></div>\n';
@@ -217,7 +243,7 @@ function renderAttendances(aa) {
 function saveAttendances() {
     var xhr = new XMLHttpRequest();
     var formJson = getFormJson();
-    xhr.open('PUT', '../updateDbEntry', false);
+    xhr.open('PUT', relroot+'updateDbEntry', false);
     xhr.setRequestHeader('Content-Type', 'application/json');
     xhr.send(JSON.stringify(formJson));
     if (xhr.responseText = 'ok') {
@@ -232,7 +258,7 @@ function saveAttendances() {
 function showImages() {
     var imgs = document.getElementsByClassName('img');
     for (var i=0, item; item = imgs[i]; i++) {
-        item.innerHTML = '<img src="../getStudentImg/small/'+item.id+'"/>'
+        item.innerHTML = '<img src="'+relroot+'getStudentImg/small/'+item.id+'"/>'
     }
     document.getElementById('showImages').innerHTML = '';
     students = document.getElementsByClassName('student');
@@ -262,7 +288,7 @@ if (l.lid == '') {
         <a onclick="show()">Anzeigen</a> | \
         <a onclick="edit()">Bearbeiten</a> | \
         <a onclick="showAttendances()">Teilnahmen</a> | \
-        <a href="../class/'+cl.cid+'">&rarr; '+cl.name+' '+cl.subject+'</a>';
+        <a href="'+relroot+'class/'+cl.cid+'">&rarr; '+cl.name+' '+cl.subject+'</a>';
     show();
 }    
 
