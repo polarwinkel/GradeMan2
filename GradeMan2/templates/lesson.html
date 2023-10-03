@@ -69,7 +69,11 @@ function edit() {
         <div style="clear:both;" id="lastLesson"></div>\
     '
     document.getElementById('lid').value = l.lid;
-    document.getElementById('date').value = l.date;
+    if (l.date != '') {
+        document.getElementById('date').value = l.date;
+    } else {
+        document.getElementById('date').valueAsDate = new Date();
+    }
     var cid = document.getElementById('cid');
     if (l.lid == '') {
         for (var i=0; i < c.length; i++) {
@@ -109,7 +113,7 @@ function send() {
         if (isNaN(xhr.responseText)) {
             document.getElementById('content').innerHTML = xhr.responseText;
         } else {
-            window.location = xhr.responseText;
+            window.location = relroot+'lesson/'+xhr.responseText;
         }
     } else if (xhr.responseText == 'ok') {
         location.reload();

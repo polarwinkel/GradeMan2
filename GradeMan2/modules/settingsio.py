@@ -17,6 +17,7 @@ class settingsIo:
             s['debug'] = False
             # extensions to be used by python-markdown:
             s['extensions']=['def_list', 'fenced_code', 'tables', 'admonition', 'nl2br', 'sane_lists', 'toc']
+            s['dateHalfYear']=''
             with open(sfile, 'w') as file:
                 yaml.dump(s, file)
         with open(sfile) as file:
