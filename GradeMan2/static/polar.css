@@ -1,4 +1,4 @@
-/* v1.1.1 */
+/* v1.2.0 */
 /* for proper form-sizing */
 * {
   box-sizing: border-box;
@@ -49,6 +49,12 @@ table td {
 button {
     font-size: 1em;
     font-family: Latin Modern Roman, serif;
+    box-shadow: 2px 2px rgba(200,200,200,0.8);
+}
+button:active {
+    background-color: #aaa;
+    box-shadow: 0 0px;
+    transform: translateX(2px) translateY(2px);
 }
 select {
     font-size: 1em;
@@ -57,6 +63,10 @@ select {
 input {
     font-size: 1em;
     font-family: Latin Modern Roman, serif;
+}
+input:disabled {
+    color: #888;
+    background-color: #888;
 }
 textarea {
     font-size: 0.8em;
@@ -128,15 +138,22 @@ textarea {
         color: white;
         border: 1px solid black;
     }
+    input:disabled {
+        background-color: rgba(50,50,50,0.8);
+    }
     select {
         background-color: #444;
         color: white;
         border: 1px solid black;
     }
     button {
-        background-color: #222;
+        background-color: #333;
         color: white;
         border: 1px solid black;
+        box-shadow: 2px 2px rgba(80,80,80,0.8);
+    }
+    button:active {
+        background-color: #444;
     }
     a {
         color:#4f4;
