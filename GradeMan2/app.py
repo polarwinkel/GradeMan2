@@ -215,7 +215,7 @@ def sendJson(what):
         out = db.getTimetable()
     else:
         return render_template('404.html', relroot='../'), 404
-    return jsonify(out)
+    return json.dumps(out)
 
 @app.route('/mdtex2html', methods=['POST'])
 def post_mdtex2html():
