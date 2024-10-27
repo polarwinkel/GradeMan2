@@ -167,10 +167,14 @@ function csvImport() {
             xhr.open('POST', '../newDbEntry', false);
             xhr.setRequestHeader('Content-Type', 'application/json');
             xhr.send(JSON.stringify(s));
-            if (isNaN(xhr.responseText)) {
+            if ((isNaN(xhr.responseText)) && (xhr.responseText.startsWith('FAILED: Identical entry found'))) {
+                var success = true;
+                pa.message('HINWEIS: Identischen Schüler gefunden, ich habe den vorhandenen eingetragen: '+s.givenname+' '+s.familyname+'<br>(ggf. manuell korrigieren)');
+            } else if (isNaN(xhr.responseText)) {
                 var success = false;
                 pa.error('FEHLER! Ich breche es hier ab.<br /> Fehlermeldung:<br />'+xhr.responseText);
                 break;
+            }
             } else var success = true;
             // TODO: Ask for every pared student if it shall be imported!
         }
