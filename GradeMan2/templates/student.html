@@ -169,13 +169,12 @@ function csvImport() {
             xhr.send(JSON.stringify(s));
             if ((isNaN(xhr.responseText)) && (xhr.responseText.startsWith('FAILED: Identical entry found'))) {
                 var success = true;
-                pa.message('HINWEIS: Identischen Schüler gefunden, ich habe den vorhandenen eingetragen: '+s.givenname+' '+s.familyname+'<br>(ggf. manuell korrigieren)');
+                //pa.message('HINWEIS: Identischen Schüler gefunden (übersprungen): '+s.givenname+' '+s.familyname);
             } else if (isNaN(xhr.responseText)) {
                 var success = false;
                 pa.error('FEHLER! Ich breche es hier ab.<br /> Fehlermeldung:<br />'+xhr.responseText);
                 break;
             } else var success = true;
-            // TODO: Ask for every pared student if it shall be imported!
         }
     }
     if (success) {
@@ -191,7 +190,7 @@ function showCsvImportForm() {
         <p>Bitte die Klassenliste im CSV-Format in das Eingabefeld kopieren.<br />\
         Formatierungsbeispiel:<br />\
         <code>Mustermann, Max, m</code> (Optionen für Geschlecht: <code>m</code>(ännlich), <code>w</code>(eiblich) oder <code>o</code>(other))<br />\
-        (Leerzeichen nach dem Komma werden automatisch entfernt, ein abschließendes Komma und das Geschlecht ist nicht nötig.)</p>\
+        (Leerzeichen nach dem Komma werden automatisch entfernt, ein abschließendes Komma und das Geschlecht ist nicht nötig, vorhandene Schüler werden übersprungen.)</p>\
         <div style="clear:both;"><label for="memo">Klassenliste im <br />csv-Format: </label><textarea id="csv"></textarea></div>\
         <p style="clear:both;">\
         {% for c in classes %}\
