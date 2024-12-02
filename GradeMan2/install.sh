@@ -8,7 +8,7 @@ if [ "$(id -u)" -ne 0 ]; then
 fi
 
 # set defaults (may be changed if not available)
-port='4200'
+port='4202'
 host='0.0.0.0'
 user='gm'
 appname='GradeMan'
