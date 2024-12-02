@@ -23,7 +23,7 @@ conffile=home+'/.GradeMan2conf.yaml'
 port=4202
 
 # start-stuff:
-app = Flask(__name__)
+GradeMan = Flask(__name__)
 settings = settingsio.settingsIo(conffile)
 dbfile = settings.get('dbfile')
 host = settings.get('host')
@@ -32,7 +32,7 @@ extensions = settings.get('extensions') # python-markdown extensions
 
 # routes:
 
-@app.route('/', methods=['GET'])
+@GradeMan.route('/', methods=['GET'])
 def index():
     '''show index-page'''
     # TODO: return settings if first run (no database)
@@ -42,18 +42,18 @@ def index():
     c = db.getClasses()
     return render_template('index.html', relroot='./', mjson=m, tjson=t, cjson=c)
 
-@app.route('/static/<path:path>', methods=['GET'])
+@GradeMan.route('/static/<path:path>', methods=['GET'])
 def sendStatic(path):
     return send_from_directory('', path)
 
-@app.route('/class/', methods=['GET'])
+@GradeMan.route('/class/', methods=['GET'])
 def newClass():
     c = {'cid':'', 'name':'', 'subject':'', 'graduate':'', 'memo':''}
     lShort = '[]'
     memo = ''
     return render_template('class.html', relroot='../', c=c, memo=memo, lShortJson=lShort)
 
-@app.route('/class/<int:cid>', methods=['GET'])
+@GradeMan.route('/class/<int:cid>', methods=['GET'])
 def sendClass(cid):
     db = dbio.GmDb(dbfile)
     c = None
@@ -66,28 +66,28 @@ def sendClass(cid):
     memo = mdtex2html.convert(c['memo'], extensions)
     return render_template('class.html', relroot='../', c=c, memo=memo, lShortJson=lShort, dateHalfYear=settings.get('dateHalfYear'))
 
-@app.route('/lesson/', methods=['GET'])
+@GradeMan.route('/lesson/', methods=['GET'])
 def newLesson():
     db = dbio.GmDb(dbfile)
     l = {'lid':'', 'date':'', 'cid':'', 'topic':'', 'count':'', 'memo':'', 'details':''}
     c = db.getClasses()
     return render_template('lesson.html', relroot='../', ljson=l, cjson=c)
 
-@app.route('/lesson/class/<int:cid>', methods=['GET'])
+@GradeMan.route('/lesson/class/<int:cid>', methods=['GET'])
 def newClassLesson(cid):
     db = dbio.GmDb(dbfile)
     l = {'lid':'', 'date':'', 'cid':cid, 'topic':'', 'count':'', 'memo':'', 'details':''}
     c = db.getClasses()
     return render_template('lesson.html', relroot='../../', ljson=l, cjson=c)
 
-@app.route('/lesson/<int:lid>', methods=['GET'])
+@GradeMan.route('/lesson/<int:lid>', methods=['GET'])
 def sendLesson(lid):
     db = dbio.GmDb(dbfile)
     l = db.getLesson(lid)
     c = db.getClasses()
     return render_template('lesson.html', relroot='../', ljson=l, cjson=c)
 
-@app.route('/student/', methods=['GET'])
+@GradeMan.route('/student/', methods=['GET'])
 def newStudent():
     db = dbio.GmDb(dbfile)
     s = {'sid':'', 'givenname':'', 'familyname':'', 'gender':'', 'memo':''}
@@ -97,7 +97,7 @@ def newStudent():
     sclasses = db.getStudentClasses(s['sid'])
     return render_template('student.html', relroot='../', s=s, memo=memo, img=img, sjson=s, classes=classes, sclasses=sclasses)
 
-@app.route('/student/<int:sid>', methods=['GET'])
+@GradeMan.route('/student/<int:sid>', methods=['GET'])
 def sendStudent(sid):
     db = dbio.GmDb(dbfile)
     s = db.getStudent(sid)
@@ -113,26 +113,26 @@ def sendStudent(sid):
     sclasses = db.getStudentClasses(sid)
     return render_template('student.html', relroot='../', s=s, memo=memo, img=img, sjson=s, classes=classes, sclasses=sclasses)
 
-@app.route('/setStudentImg/<int:sid>', methods=['GET'])
+@GradeMan.route('/setStudentImg/<int:sid>', methods=['GET'])
 def sendSetStudentImg(sid):
     return render_template('setStudentImg.html', relroot='../', sid=sid)
 
-@app.route('/data', methods=['GET'])
+@GradeMan.route('/data', methods=['GET'])
 def sendData():
     db = dbio.GmDb(dbfile)
     c = db.getClasses()
     return render_template('data.html', relroot='./', cjson=c)
 
-@app.route('/mdTeXCheatsheet', methods=['GET'])
+@GradeMan.route('/mdTeXCheatsheet', methods=['GET'])
 def sendMdTeXCheatSheet():
     return render_template('mdTeXCheatsheet.html', relroot='./')
 
-@app.route('/settings', methods=['GET'])
+@GradeMan.route('/settings', methods=['GET'])
 def sendSettings():
     return render_template('settings.html', relroot='./', settings=settings.getJson())
 
-@app.route('/getStudentImg/<int:sid>', methods=['GET'])
-@app.route('/getStudentImg/<int:sid>.jpg', methods=['GET'])
+@GradeMan.route('/getStudentImg/<int:sid>', methods=['GET'])
+@GradeMan.route('/getStudentImg/<int:sid>.jpg', methods=['GET'])
 def sendStudentImg(sid):
     '''send a student image as jpeg-file'''
     db = dbio.GmDb(dbfile)
@@ -145,8 +145,8 @@ def sendStudentImg(sid):
     response.headers.set('Content-Disposition', '', filename='%s.jpg' % sid)
     return response
 
-@app.route('/getStudentImg/small/<int:sid>', methods=['GET'])
-@app.route('/getStudentImg/small/<int:sid>.jpg', methods=['GET'])
+@GradeMan.route('/getStudentImg/small/<int:sid>', methods=['GET'])
+@GradeMan.route('/getStudentImg/small/<int:sid>.jpg', methods=['GET'])
 def sendSmallStudentImg(sid):
     '''send a small student image as jpeg-file'''
     db = dbio.GmDb(dbfile)
@@ -165,7 +165,7 @@ def sendSmallStudentImg(sid):
     response.headers.set('Content-Disposition', '', filename='%s.jpg' % sid)
     return response
 
-@app.route('/json/<path:what>', methods=['GET'])
+@GradeMan.route('/json/<path:what>', methods=['GET'])
 # TODO: split this up to separate routes
 def sendJson(what):
     db = dbio.GmDb(dbfile)
@@ -217,7 +217,7 @@ def sendJson(what):
         return render_template('404.html', relroot='../'), 404
     return json.dumps(out)
 
-@app.route('/mdtex2html', methods=['POST'])
+@GradeMan.route('/mdtex2html', methods=['POST'])
 def post_mdtex2html():
     postvars = request.data
     try:
@@ -225,7 +225,7 @@ def post_mdtex2html():
     except Exception as e:
         return 'ERROR: Could not convert the mdTeX to HTML:' + str(e)
 
-@app.route('/setStudentImg/<int:sid>', methods=['POST'])
+@GradeMan.route('/setStudentImg/<int:sid>', methods=['POST'])
 def setStudentImg(sid):
     db = dbio.GmDb(dbfile)
     print(str('hallo'), file=sys.stderr)
@@ -236,7 +236,7 @@ def setStudentImg(sid):
     content = 'student/%s' % sid
     return content
 
-@app.route('/newDbEntry', methods=['POST'])
+@GradeMan.route('/newDbEntry', methods=['POST'])
 # TODO: check if RESTful:
 def newDbEntry():
     db = dbio.GmDb(dbfile)
@@ -250,8 +250,8 @@ def newDbEntry():
         result = db.newMemo(request.json)
     return str(result)
 
-@app.route('/updateDbEntry', methods=['POST'])
-@app.route('/updateDbEntry', methods=['PUT'])
+@GradeMan.route('/updateDbEntry', methods=['POST'])
+@GradeMan.route('/updateDbEntry', methods=['PUT'])
 # TODO: move all this to PUT-requests from frontend as well
 def updateDbEntry():
     db = dbio.GmDb(dbfile)
@@ -276,7 +276,7 @@ def updateDbEntry():
         content = 'ERROR 500: SQL-Error: '+str(result)
     return content
 
-@app.route('/updateSettings', methods=['PUT'])
+@GradeMan.route('/updateSettings', methods=['PUT'])
 def updateSettings():
     setnew = request.json
     if 'False' in setnew['extensions']:
@@ -294,7 +294,7 @@ def updateSettings():
     content = 'ok'
     return content
 
-@app.route('/deleteDbEntry', methods=['DELETE'])
+@GradeMan.route('/deleteDbEntry', methods=['DELETE'])
 # TODO: Requests to delete database-entries
 def deleteDbEntry():
     db = dbio.GmDb(dbfile)
@@ -317,11 +317,11 @@ def deleteDbEntry():
         content = 'ERROR 500: SQL-Error: '+str(result)
     return content
 
-@app.errorhandler(404)
+@GradeMan.errorhandler(404)
 def error_not_found(error):
     return render_template('404.html'), 404
 
 # run it:
 
 if __name__ == '__main__':
-    app.run(host=host, port=port, debug=debug)
+    GradeMan.run(host=host, port=port, debug=debug)
