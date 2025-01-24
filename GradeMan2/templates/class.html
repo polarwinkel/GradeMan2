@@ -248,7 +248,23 @@ function seatingEditor() {
     Ein besetzter Platz erhält die Schülernummer (ermittelbar z.B. durch Anschauen des Links zur Schülerseite).<br />\
     Plätze sind horizontal durch `,` getrennt, vertikal durch eine neue Zeile.<br />\
     Es ergibt sich damit ein tabellarischer Sitzplan.</p>';
+    out += '<p><a onclick="seatingShuffle()">Sitzplan zufällig neu verteilen</a><br>\
+    <i>(Dopplungen werden entfernt; nur platzierte SuS werden neu platziert)</i></p>';
     editor.innerHTML = out;
+}
+function seatingShuffle() {
+    var textarea = document.getElementById('seating');
+    var students = textarea.value.trim().replaceAll('\n', ',')
+    students = students.split(',').filter(Number); // list of all seated students
+    students = [...new Set(students)] // remove duplicates
+    students = students.sort(() => Math.random() - 0.5); // shuffle list
+    const numRegex = /[0-9]+/gi;
+    var out = textarea.value.replaceAll(numRegex, 'x'); // empty seating plan
+    for (var s of students) {
+        out = out.replace('x', s); // place students to empty seats
+    }
+    out = out.replaceAll('x', '')
+    textarea.value = out;
 }
 function learnNames() {
     var url = '../json/classStudents/'+c.cid;
