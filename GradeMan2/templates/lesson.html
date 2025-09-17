@@ -168,15 +168,22 @@ function renderRange(what, nr, graduate, val='-') {
         }
     }
 }
+function switchCheck(name) {
+    var checkboxes = document.getElementsByName(name);
+    for (var i = 0; i < checkboxes.length; i++) {
+        var checkbox = checkboxes[i];
+        checkbox.checked = !checkbox.checked;
+    }
+}
 function renderAttendances(aa) {
     out = '<h2>Teilnahmen</h2>\n';
     out += '<p id="showImages"><a onclick="showImages()">Bilder einblenden</a></p>\n';
     out += '<div onchange="this.style.backgroundColor=`rgba(127,127,0,0.2)`">';
     out += '<input type="hidden" id="what" name="what" class="formdata" value="attendances" />';
     out += '<div class="student"><div style="float:left; width:12rem; max-width:100%; font-weight:bold;">Vorname Nachname</div>\n';
-    out += '<div style="float:left; width:1.5rem; font-weight:bold;">A</div>\n';
-    out += '<div style="float:left; width:1.5rem; font-weight:bold;">E</div>\n';
-    out += '<div style="float:left; width:1.5rem; font-weight:bold;">H</div>\n';
+    out += '<div style="float:left; width:1.5rem; font-weight:bold;">A <a onclick="switchCheck(\'attendant\')">&#11136;</a></div>\n';
+    out += '<div style="float:left; width:1.5rem; font-weight:bold;">E <a onclick="switchCheck(\'excused\')">&#11136;</a></div>\n';
+    out += '<div style="float:left; width:1.5rem; font-weight:bold;">H <a onclick="switchCheck(\'homework\')">&#11136;</a></div>\n';
     out += '<div style="float:left;">\n';
     out += '<div style="float:left; width:11.5rem; font-weight:bold;">Fachlich</div>\n';
     out += '<div style="float:left; width:11.5rem; font-weight:bold;">Mitarbeit</div>\n';
